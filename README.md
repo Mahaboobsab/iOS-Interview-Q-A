@@ -1,7 +1,22 @@
 # iOS-Interview-Q-A
 Contains interview question &amp; Answers on Objective C, swift &amp; Swift UI
 
-## Question 1: Explain what is the difference between Weak & Unowned?  
+## Question 1: Explain iOS Property Attributes  
+
+This table provides a concise explanation of common property attributes used in iOS development (Objective-C), including their default values.
+
+| Attribute     | One-Line Explanation                                                                 | Default Value               |
+|---------------|----------------------------------------------------------------------------------------|-----------------------------|
+| `strong`      | Keeps a strong reference to the object, increasing its retain count.                  | ✅ Yes (for object types)   |
+| `weak`        | Holds a non-owning reference that becomes `nil` when the object is deallocated.       | ❌ No                       |
+| `copy`        | Creates a copy of the object instead of referencing the original (used for immutability). | ❌ No                   |
+| `assign`      | Assigns the value directly without retaining it (used for primitives).                | ✅ Yes (for non-objects)    |
+| `nonatomic`   | Access to the property is not thread-safe but faster.                                 | ✅ Yes                      |
+| `atomic`      | Ensures thread-safe access to the property (slower).                                 | ❌ No                       |
+| `readwrite`   | Allows both getter and setter methods.                                                | ✅ Yes                      |
+| `readonly`    | Only allows a getter; no setter is generated.                                         | ❌ No                       |
+
+## Question 2: Explain what is the difference between Weak & Unowned?  
 
 Ans:  
 | Feature           |  weak                                   | unowned                                       |
