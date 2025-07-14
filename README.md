@@ -16,7 +16,21 @@ This table provides a concise explanation of common property attributes used in 
 | `readwrite`   | Allows both getter and setter methods.                                                | ✅ Yes                      |
 | `readonly`    | Only allows a getter; no setter is generated.                                         | ❌ No                       |
 
-## Question 2: Explain what is the difference between Weak & Unowned?  
+
+## Question 2: Difference between strong & retain?  
+
+- **strong** - Swift (modern syntax)
+- **retain** - Objective C (older terminology)
+- 
+  ```swift
+  var person: Person // (strong by defalult)  
+  ```
+  
+  ```Objective C
+  @property(retain) Person *person;
+  ```
+  
+## Question 3: Explain what is the difference between Weak & Unowned?  
 
 Ans:  
 | Feature           |  weak                                   | unowned                                       |
