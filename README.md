@@ -143,17 +143,27 @@ class WelcomeViewController: UIViewController {
     protocol Eater {
     func eat()
     }
+    
     protocol Barker {
     func bark()
     }
+    
     struct Dog: Eater, Barker {
+    
     func eat() {
     print("Eating")
     }
+    
     func bark() {
     print("Barking")
-    }
-    }
-    ```
+      }
+  }
+    ```  
+  composition
 
-
+## Question 5: Explain Core Data DELETE Rules?
+    |-> No Action  
+    |-> Nullify  
+    |-> Cascade - (When deletes source object, it also deletes any object in the relationship)  
+    |-> Deny - (Prevents deletion, if there are any related objects)  
+    
