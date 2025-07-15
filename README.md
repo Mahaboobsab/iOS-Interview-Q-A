@@ -285,6 +285,81 @@ func readFileContents(path: String) {
 |**Updating UI**|Task (runs on the main thread)|
 |**Main thread**|Thread (dedicated to UI updates)|
 
+## Question 8: Expalain Operation?
+- Operation is Abstract class, designed for sub classing. Each sub task represents a specific task.
+- main() is the method you override in operation subclasses to actually perform work.
 
+**✅ Example: Custom WeatherFetchOperation**  
+
+Let’s say you want to fetch weather data from an API. You can create a custom Operation subclass like this:  
+
+```swift
+import Foundation
+
+class WeatherFetchOperation: Operation {
+    private let url: URL
+    private var task: URLSessionDataTask?
+
+    init(url: URL) {
+        self.url = url
+    }
+
+    override func main() {
+        if isCancelled { return }
+
+        let semaphore = DispatchSemaphore(value: 0)
+
+        task = URLSession.shared.dataTask(with: url) { data, response, error in
+            defer { semaphore.signal() }
+
+            if self.isCancelled { return }
+
+            if let data = data {
+                print("✅ Weather data received: \(data.count) bytes")
+                // You can parse JSON here or pass it to a delegate/closure
+            } else if let error = error {
+                print("❌ Error fetching weather: \(error)")
+            }
+        }
+
+        task?.resume()
+        semaphore.wait() // Wait for the task to complete before finishing the operation
+    }
+
+    override func cancel() {
+        super.cancel()
+        task?.cancel()
+    }
+}
+
+```
+**🧪 How to Use It**  
+
+```swift
+let weatherURL = URL(string: "https://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=London")!
+let weatherOperation = WeatherFetchOperation(url: weatherURL)
+
+let queue = OperationQueue()
+queue.addOperation(weatherOperation)
+
+```
+**🧠 Why Use a Custom Operation?**  
+
+You can **cancel** the operation cleanly.  
+You can **track** its state (executing, finished).  
+You can add **dependencies** between operations.  
+You can **reuse** it in different parts of your app.  
+
+**⚙️ How Does It Work?**  
+
+- **Create an Operation**
+      Use BlockOperation or subclass Operation.
+- **Add it to an OperationQueue**
+      The queue manages threads and runs the operation.
+- **(Optional) Set dependencies or priorities**
+      You can control the order and importance of tasks.
+
+
+  
 
 
