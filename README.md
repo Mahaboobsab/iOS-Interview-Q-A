@@ -133,3 +133,27 @@ class WelcomeViewController: UIViewController {
     You're sure self will still exist.  
     You want to avoid optional unwrapping (self?).  
 
+## Question 4: Explain why swift is called protocol oriented language?  
+  - They are not limited to **classes**, **structs** & **enums** can conform too.
+  - Protocol extenstion allow default behaviour
+  - Encourgages **composition** over inheritance.
+    
+    **Example**:
+    ```swift
+    protocol Eater {
+    func eat()
+    }
+    protocol Barker {
+    func bark()
+    }
+    struct Dog: Eater, Barker {
+    func eat() {
+    print("Eating")
+    }
+    func bark() {
+    print("Barking")
+    }
+    }
+    ```
+
+
