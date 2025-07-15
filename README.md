@@ -159,9 +159,8 @@ class WelcomeViewController: UIViewController {
       }
   }
     ```  
-  composition
+## Question 5: Explain Core Data DELETE Rules?  
 
-## Question 5: Explain Core Data DELETE Rules?
     |-> No Action  
     |-> Nullify  
     |-> Cascade - (When deletes source object, it also deletes any object in the relationship)  
