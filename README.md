@@ -265,3 +265,26 @@ func readFileContents(path: String) {
 
 ```
 
+## Question 7: Expalain Process, Task & Thread?  
+
+**Summary Table**
+
+		
+| Concept     | Description  |iOS Example|
+|---------------|------------|-----------|
+|**Process**|Running instance of an app|Each app runs in its own process |
+|**Thread**|Unit of execution within a process| Main thread for UI, background threads for tasks |
+|**Task**|Unit of work scheduled on a thread | GCD block, Swift Task, URLSessionTask|  
+
+**Example of App**
+
+| Step     | What it is  |
+|---------------|------------|
+|**App running**|Process|
+|**API call**|Task (runs on a background thread)|
+|**Updating UI**|Task (runs on the main thread)|
+|**Main thread**|Thread (dedicated to UI updates)|
+
+
+
+
