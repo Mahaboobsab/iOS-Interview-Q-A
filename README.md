@@ -165,4 +165,35 @@ class WelcomeViewController: UIViewController {
     |-> Nullify  
     |-> Cascade - (When deletes source object, it also deletes any object in the relationship)  
     |-> Deny - (Prevents deletion, if there are any related objects)  
+
     
+## Question 6: What is an Enum with Associated Type?  
+
+- Sometimes, you want each case to carry extra information. That’s where associated types come in.
+  
+- **Enum**: A list of named values.
+- **Associated** type: Extra data attached to each value.
+- **Why use i**t: To handle different types of data in a clean and organized way.
+  
+
+  Imagine you’re building a media app. You want to represent different types of media:
+ ```swift  
+  
+   enum Media {
+    case photo(name: String)
+    case video(name: String, duration: Int)
+    case text(message: String)
+}
+
+func show(media: Media) {
+    switch media {
+    case .photo(let name):
+        print("Photo: \(name)")
+    case .video(let name, let duration):
+        print("Video: \(name), Duration: \(duration) seconds")
+    case .text(let message):
+        print("Text: \(message)")
+    }
+}
+```
+
