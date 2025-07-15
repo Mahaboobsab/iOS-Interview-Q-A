@@ -196,4 +196,72 @@ func show(media: Media) {
     }
 }
 ```
+## Question 6: What is defer in swift?
+- In Swift, **defer** is a keyword used to schedule code to **run later**, specifically just before the current scope (like a function or loop) exits.
+
+**Think of defer like saying:**  
+
+"Do this last, no matter what happens before."  
+ Even if your function returns early or throws an error, the code inside defer will still run before the function finishe  
+ ```swift
+func readFile() {
+    print("Opening file")
+
+    defer {
+        print("Closing file")
+    }
+
+    print("Reading file")
+}
+```
+
+**Output**  
+Opening file  
+Reading file  
+Closing file  
+
+Even though defer is written in the middle, it runs last.  
+
+**Why Use defer?**
+To clean up resources (like closing files, releasing memory, stopping timers).  
+To make sure something always happens, even if there's an error or early return.  
+
+**Multiple defer Blocks**  
+If you use more than one defer, they run in reverse order (like a stack):  
+
+```swift
+func test() {
+    defer { print("First") }
+    defer { print("Second") }
+    defer { print("Third") }
+}
+```
+
+**Output**  
+Third  
+Second  
+First  
+
+**Example**  
+
+```swift
+func readFileContents(path: String) {
+    let file = openFile(path) // pretend this opens a file
+    print("File opened")
+
+    defer {
+        closeFile(file) // this will always run before the function ends
+        print("File closed")
+    }
+
+    // Simulate reading
+    guard let contents = try? read(file) else {
+        print("Failed to read file")
+        return
+    }
+
+    print("File contents: \(contents)")
+}
+
+```
 
