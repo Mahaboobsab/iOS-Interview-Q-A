@@ -419,5 +419,125 @@ This table summarizes how to trigger common `UIViewController` lifecycle methods
 | `viewWillDisappear`    | `viewController.beginAppearanceTransition(false, animated: false)` |
 | `viewDidDisappear`     | `viewController.endAppearanceTransition()` |
 
-Use these techniques to simulate lifecycle events and verify side effects in your view controllers.
+Use these techniques to simulate lifecycle events and verify side effects in your view controllers.  
+
+## Question 10: Explain Dispatch Barrier?  
+
+A dispatch barrier is a synchronization mechanism used with concurrent dispatch queues in Swift (via Grand Central Dispatch)  
+to ensure exclusive access to a resource during a specific task.  
+
+**🚧 What it does:**  
+It blocks the queue temporarily so that the barrier task runs alone, even on a concurrent queue.  
+
+All tasks submitted before the barrier must finish before the barrier task starts.  
+
+Tasks submitted after the barrier wait until the barrier task completes.  
+
+**🧠 Why it's useful:**  
+
+It allows safe modification of shared resources (like arrays or dictionaries) while still benefiting from concurrent reads.  
+
+It’s like saying: “Everyone pause—let me do this one thing without interruption—then carry on.”  
+
+```swift
+import UIKit
+
+let concurrentQueue = DispatchQueue(label: "com.example.concurrentQueue", attributes: .concurrent)
+var sharedArray: [Int] = []
+
+// Reading from the array concurrently
+concurrentQueue.async {
+    print("Read 1: \(sharedArray)")
+}
+
+concurrentQueue.async {
+    print("Read 2: \(sharedArray)")
+}
+
+concurrentQueue.async {
+    print("Read 3: \(sharedArray)")
+}
+
+concurrentQueue.async {
+    print("Read 4: \(sharedArray)")
+}
+
+concurrentQueue.async {
+    print("Read 5: \(sharedArray)")
+}
+
+concurrentQueue.async {
+    print("Read 6: \(sharedArray)")
+}
+
+// Writing to the array using a barrier to ensure exclusive access
+concurrentQueue.async(flags: .barrier) {
+    sharedArray.append(42)
+    print("Write: Added 42")
+}
+
+
+/*
+concurrentQueue.async {
+    sharedArray.append(42)
+    print("Write: Added 42")
+}
+*/
+
+// More reads after the barrier
+concurrentQueue.async {
+    print("Read 7: \(sharedArray)")
+}
+
+
+concurrentQueue.async {
+    print("Read 8: \(sharedArray)")
+}
+
+concurrentQueue.async {
+    print("Read 9: \(sharedArray)")
+}
+```
+**🔍 What this shows:**  
+
+Concurrent reads happen in parallel without blocking.  
+
+Barrier writes (with .barrier) ensure that each write waits for previous tasks to finish and blocks future tasks until it's done.  
+
+The sync barrier (sync(flags: .barrier)) blocks the calling thread and guarantees exclusive access during execution.  
+
+This pattern is great for thread-safe access when you want fast concurrent reads but need to serialize writes. Want to see how this compares to using actors or locks for thread safety?
+
+
+
+#### 🧪  Output – Without Dispatch Barrier  
+
+| Run 1              | Run 2              | Run 3              | Run 4              | Run 5              | Run 6              |
+|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Read 1: []         | Read 1: []         | Read 1: []         | Read 1: []         | Read 1: []         | Read 1: []         |
+| Read 5: []         | Read 2: []         | Read 2: []         | Read 2: []         | Read 2: []         | Read 2: []         |
+| Read 6: []         | Read 3: []         | Read 3: []         | Read 3: []         | Read 3: []         | Read 3: []         |
+| Write: Added 42    | Read 4: []         | Read 4: []         | Read 5: []         | Read 5: []         | Read 5: []         |
+| Read 2: []         | Read 6: []         | Read 6: []         | Read 4: []         | Read 4: []         | Read 6: []         |
+| Read 9: []         | Read 5: []         | Read 5: []         | Read 6: []         | Read 6: []         | Read 4: []         |
+| Read 8: []         | Read 7: []         | Read 7: []         | Read 7: [42]       | Read 7: []         | Read 7: []         |
+| Read 3: []         | Read 8: [42]       | Read 8: []         | Read 8: [42]       | Read 9: [42]       | Read 9: [42]       |
+| Read 7: []         | Read 9: [42]       | Read 9: [42]       | Read 9: [42]       | Read 8: [42]       | Read 8: [42]       |
+| Read 4: []         | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    |  
+
+#### 🧪  Output – With Dispatch Barrier  
+
+| Run 1              | Run 2              | Run 3              | Run 4              | Run 5              | Run 6              |
+|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Read 1: []         | Read 1: []         | Read 1: []         | Read 1: []         | Read 1: []         | Read 1: []         |
+| Read 2: []         | Read 2: []         | Read 2: []         | Read 2: []         | Read 2: []         | Read 2: []         |
+| Read 3: []         | Read 3: []         | Read 3: []         | Read 3: []         | Read 3: []         | Read 3: []         |
+| Read 5: []         | Read 4: []         | Read 5: []         | Read 6: []         | Read 4: []         | Read 4: []         |
+| Read 6: []         | Read 6: []         | Read 4: []         | Read 4: []         | Read 6: []         | Read 5: []         |
+| Read 4: []         | Read 5: []         | Read 6: []         | Read 5: []         | Read 5: []         | Read 6: []         |
+| Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    |
+| Read 7: [42]       | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       |
+| Read 9: [42]       | Read 9: [42]       | Read 8: [42]       | Read 8: [42]       | Read 9: [42]       | Read 9: [42]       |
+| Read 8: [42]       | Read 8: [42]       | Read 9: [42]       | Read 9: [42]       | Read 8: [42]       | Read 8: [42]       |
+
 
