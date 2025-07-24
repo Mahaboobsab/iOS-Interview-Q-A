@@ -359,7 +359,52 @@ You can **reuse** it in different parts of your app.
 - **(Optional) Set dependencies or priorities**
       You can control the order and importance of tasks.
 
+## Question 9: How to create test cases for UIViewcontroller life cycle methods?  
 
-  
+Testing UIViewController lifecycle methods directly can be tricky because they are tightly coupled with the UIKit framework and triggered by the system.  
+However, you can still write meaningful tests by focusing on observable side effects and using test doubles or manual invocation.  
 
+**✅ Approach to Test UIViewController Lifecycle Methods**  
+
+**🔹 1. Override Lifecycle Methods**
+Add logging or flags to detect method calls.  
+```swift
+class MyViewController: UIViewController {
+    var didCallViewDidLoad = false
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        didCallViewDidLoad = true
+    }
+}
+```
+**🔹 2. Write Unit Test Using XCTest**  
+```swift
+func testViewDidLoadIsCalled() {
+    let vc = MyViewController()
+    _ = vc.view  // Triggers viewDidLoad
+    XCTAssertTrue(vc.didCallViewDidLoad)
+}
+```
+**🔹 3. Test Side Effects**  
+Instead of testing the method directly, test what the method does (e.g., setting up views, data, observers).  
+```swift
+func testViewDidLoadSetsUpLabel() {
+    let vc = MyViewController()
+    _ = vc.view
+    XCTAssertEqual(vc.titleLabel.text, "Welcome")
+}
+```
+**🔹 4. Use loadViewIfNeeded()**  
+This ensures the view is loaded and lifecycle methods are triggered.  
+```swift
+vc.loadViewIfNeeded()
+```
+**🔹 5. Test viewWillAppear, viewDidAppear, etc.**  
+
+You can manually call these methods in tests to simulate behavior.  
+```swift
+vc.viewWillAppear(false)
+XCTAssertTrue(vc.didSetupBindings)
+```
 
