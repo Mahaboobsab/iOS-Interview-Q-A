@@ -407,4 +407,17 @@ You can manually call these methods in tests to simulate behavior.
 vc.viewWillAppear(false)
 XCTAssertTrue(vc.didSetupBindings)
 ```
+# UIViewController Lifecycle Testing Guide
+
+This table summarizes how to trigger common `UIViewController` lifecycle methods in unit tests using XCTest.
+
+| 🔄 Lifecycle Method     | 🧪 How to Trigger in Test                |
+|------------------------|------------------------------------------|
+| `viewDidLoad`          | `_ = viewController.view`                |
+| `viewWillAppear`       | `viewController.beginAppearanceTransition(true, animated: false)` |
+| `viewDidAppear`        | `viewController.endAppearanceTransition()` |
+| `viewWillDisappear`    | `viewController.beginAppearanceTransition(false, animated: false)` |
+| `viewDidDisappear`     | `viewController.endAppearanceTransition()` |
+
+Use these techniques to simulate lifecycle events and verify side effects in your view controllers.
 
