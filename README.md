@@ -568,13 +568,13 @@ Limit concurrent access to a resource (e.g., downloading files).
 Throttle network requests.  
 Coordinate thread execution when you need strict control.  
 
-# 🚦 DispatchSemaphore vs No Semaphore – Execution Comparison
+##### 🚦 DispatchSemaphore vs No Semaphore – Execution Comparison
 
 This document showcases five runs of concurrent tasks executed with and without a semaphore. The semaphore limits concurrency, ensuring controlled task scheduling.
 
 ---
 
-# ⚙️ DispatchSemaphore Effect on Task Scheduling
+##### ⚙️ DispatchSemaphore Effect on Task Scheduling
 
 This section compares the execution pattern of tasks when running **with** and **without** a `DispatchSemaphore`. The semaphore helps limit the number of concurrent tasks, leading to controlled execution.
 
