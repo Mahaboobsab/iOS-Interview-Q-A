@@ -528,6 +528,97 @@ concurrentQueue.async {
 | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    | Write: Added 42    |
 | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       | Read 7: [42]       |
 | Read 9: [42]       | Read 9: [42]       | Read 8: [42]       | Read 8: [42]       | Read 9: [42]       | Read 9: [42]       |
-| Read 8: [42]       | Read 8: [42]       | Read 9: [42]       | Read 9: [42]       | Read 8: [42]       | Read 8: [42]       |
+| Read 8: [42]       | Read 8: [42]       | Read 9: [42]       | Read 9: [42]       | Read 8: [42]       | Read 8: [42]       |  
+
+## Question 11: Explain Dispatch Semaphore  
+
+A Dispatch Semaphore in Swift is a powerful synchronization tool that helps manage access to shared resources across multiple threads.  
+Think of it as a traffic light 🚦 for threads—it controls how many threads can enter a critical section at a time.  
+
+**🧠 What It Is**  
+
+A DispatchSemaphore is a wrapper around a traditional counting semaphore. It maintains an internal counter and a queue of waiting threads.  
+Created with an initial value: This value represents how many threads can access the resource simultaneously.  
+Two key operations:  
+**wait():** Decrements the counter. If the counter is less than zero, the thread is blocked.  
+**signal():** Increments the counter. If there are blocked threads, one is unblocked.  
+
+```swift
+let semaphore = DispatchSemaphore(value: 2) // Allow 2 threads at a time
+let queue = DispatchQueue(label: "com.example.queue", attributes: .concurrent)
+
+for i in 1...5 {
+    queue.async {
+        semaphore.wait()
+        print("Task \(i) started")
+        sleep(2) // Simulate work
+        print("Task \(i) finished")
+        semaphore.signal()
+    }
+}
+```
+**🔍 What Happens Here:**  
+Only 2 tasks run concurrently.  
+Others wait until a running task calls signal() to release the semaphore.  
+This prevents race conditions and ensures controlled access.  
+
+**✅ Use Cases**  
+
+Limit concurrent access to a resource (e.g., downloading files).  
+Throttle network requests.  
+Coordinate thread execution when you need strict control.  
+
+# 🚦 DispatchSemaphore vs No Semaphore – Execution Comparison
+
+This document showcases five runs of concurrent tasks executed with and without a semaphore. The semaphore limits concurrency, ensuring controlled task scheduling.
+
+---
+
+# ⚙️ DispatchSemaphore Effect on Task Scheduling
+
+This section compares the execution pattern of tasks when running **with** and **without** a `DispatchSemaphore`. The semaphore helps limit the number of concurrent tasks, leading to controlled execution.
+
+---
+
+#### 🚀 Execution Without Semaphore
+
+| Run 1              | Run 2              | Run 3              | Run 4              | Run 5              |
+|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Task 1 started     | Task 1 started     | Task 1 started     | Task 5 started     | Task 3 started     |
+| Task 2 started     | Task 2 started     | Task 2 started     | Task 3 started     | Task 1 started     |
+| Task 3 started     | Task 3 started     | Task 3 started     | Task 1 started     | Task 2 started     |
+| Task 4 started     | Task 4 started     | Task 5 started     | Task 4 started     | Task 5 started     |
+| Task 5 started     | Task 5 started     | Task 4 started     | Task 2 started     | Task 4 started     |
+| Task 1 finished    | Task 3 finished    | Task 2 finished    | Task 3 finished    | Task 1 finished    |
+| Task 4 finished    | Task 4 finished    | Task 4 finished    | Task 4 finished    | Task 2 finished    |
+| Task 5 finished    | Task 2 finished    | Task 5 finished    | Task 5 finished    | Task 3 finished    |
+| Task 2 finished    | Task 5 finished    | Task 1 finished    | Task 1 finished    | Task 4 finished    |
+| Task 3 finished    | Task 1 finished    | Task 3 finished    | Task 2 finished    | Task 5 finished    |
+
+---
+
+#### 🔐 Execution With DispatchSemaphore
+
+| Run 1              | Run 2              | Run 3              | Run 4              | Run 5              |
+|--------------------|--------------------|--------------------|--------------------|--------------------|
+| Task 1 started     | Task 1 started     | Task 1 started     | Task 1 started     | Task 1 started     |
+| Task 2 started     | Task 2 started     | Task 2 started     | Task 2 started     | Task 2 started     |
+| Task 2 finished    | Task 2 finished    | Task 2 finished    | Task 1 finished    | Task 1 finished    |
+| Task 1 finished    | Task 1 finished    | Task 1 finished    | Task 2 finished    | Task 2 finished    |
+| Task 3 started     | Task 3 started     | Task 3 started     | Task 3 started     | Task 4 started     |
+| Task 4 started     | Task 4 started     | Task 4 started     | Task 4 started     | Task 3 started     |
+| Task 3 finished    | Task 3 finished    | Task 4 finished    | Task 3 finished    | Task 4 finished    |
+| Task 4 finished    | Task 4 finished    | Task 3 finished    | Task 4 finished    | Task 5 started     |
+| Task 5 started     | Task 5 started     | Task 5 started     | Task 5 started     | Task 3 finished    |
+| Task 5 finished    | Task 5 finished    | Task 5 finished    | Task 5 finished    | Task 5 finished    |
+
+
+**📝 Observations:**  
+
+Without semaphore: Tasks start and finish in unpredictable order, often overlapping.  
+With semaphore: Tasks run in a controlled sequence (e.g., two at a time), improving predictability and stability.  
+
+
+
 
 
