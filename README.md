@@ -498,16 +498,6 @@ concurrentQueue.async {
     print("Read 9: \(sharedArray)")
 }
 ```
-**🔍 What this shows:**  
-
-Concurrent reads happen in parallel without blocking.  
-
-Barrier writes (with .barrier) ensure that each write waits for previous tasks to finish and blocks future tasks until it's done.  
-
-The sync barrier (sync(flags: .barrier)) blocks the calling thread and guarantees exclusive access during execution.  
-
-This pattern is great for thread-safe access when you want fast concurrent reads but need to serialize writes. Want to see how this compares to using actors or locks for thread safety?
-
 
 
 #### 🧪  Output – Without Dispatch Barrier  
