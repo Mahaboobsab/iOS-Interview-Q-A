@@ -616,7 +616,136 @@ This section compares the execution pattern of tasks when running **with** and *
 **📝 Observations:**  
 
 Without semaphore: Tasks start and finish in unpredictable order, often overlapping.  
-With semaphore: Tasks run in a controlled sequence (e.g., two at a time), improving predictability and stability.  
+With semaphore: Tasks run in a controlled sequence (e.g., two at a time), improving predictability and stability. 
+
+## Question 11: Call API where 2nd API is depends on 1st API responce?  
+
+### Aproch 1: Async/Await  
+
+```swift
+
+// MARK: - Models
+struct GeoLocation: Codable {
+    let name: String
+    let lat: Double
+    let lon: Double
+    let country: String
+    let state: String?
+}
+
+struct WeatherResponse: Codable {
+    struct Weather: Codable {
+        let main: String
+        let description: String
+    }
+    let weather: [Weather]
+    let name: String
+}
+
+// MARK: - Networking Functions
+func fetchGeoLocation(for city: String) async throws -> GeoLocation {
+    let urlString = "https://api.openweathermap.org/geo/1.0/direct?q=\(city)&limit=100&appid=f32f36efd5c0cefa353f90cb87fa26d5&countrycode=IN"
+    guard let url = URL(string: urlString) else {
+        throw URLError(.badURL)
+    }
+    
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let locations = try JSONDecoder().decode([GeoLocation].self, from: data)
+    
+    guard let first = locations.first else {
+        throw NSError(domain: "No location found for \(city)", code: 0)
+    }
+    
+    return first
+}
+
+func fetchWeather(lat: Double, lon: Double) async throws -> WeatherResponse {
+    let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=f32f36efd5c0cefa353f90cb87fa26d5"
+    guard let url = URL(string: urlString) else {
+        throw URLError(.badURL)
+    }
+    
+    let (data, _) = try await URLSession.shared.data(from: url)
+    return try JSONDecoder().decode(WeatherResponse.self, from: data)
+}
+
+// MARK: - Main Function
+func fetchWeatherForCity(_ city: String) async {
+    do {
+        // Step 1: Get coordinates
+        let location = try await fetchGeoLocation(for: city)
+        print("📍 \(location.name), \(location.state ?? "") — lat: \(location.lat), lon: \(location.lon)")
+        
+        // Step 2: Use coordinates to get weather
+        let weather = try await fetchWeather(lat: location.lat, lon: location.lon)
+        if let info = weather.weather.first {
+            print("🌤️ Weather in \(weather.name): \(info.main) — \(info.description)")
+        } else {
+            print("No weather info found.")
+        }
+        
+    } catch {
+        print("❌ Error: \(error.localizedDescription)")
+    }
+}
+
+//MARK:  Method 1
+
+//Task {
+//    await fetchWeatherForCity("Ghataprabha")
+//}
+
+
+//
+
+//MARK:  Method 2
+
+/*
+Task {
+    let location = try await fetchGeoLocation(for: "Jath")     // ⏳ Waits for API 1
+    print("📍 \(location.name), \(location.state ?? "") — lat: \(location.lat), lon: \(location.lon)")
+    let weather = try await fetchWeather(lat: location.lat, lon: location.lon) // ⏳ Waits for API 2
+    if let info = weather.weather.first {
+        print("🌤️ Weather in \(weather.name): \(info.main) — \(info.description)")
+    } else {
+        print("No weather info found.")
+    }
+}
+ */
+
+
+//MARK:  Method 3
+
+
+func loadWeather(for city: String) async {
+    do {
+        let location = try await fetchGeoLocation(for: city)
+        
+        do {
+            let weather = try await fetchWeather(lat: location.lat, lon: location.lon)
+            print("🌤️ Weather: \(weather)")
+        } catch {
+            print("❌ Failed to get weather info: \(error.localizedDescription)")
+        }
+        
+    } catch {
+        print("❌ Failed to get location info: \(error.localizedDescription)")
+    }
+}
+
+Task {
+    await loadWeather(for:"Jath")
+}
+
+//MARK: Method 4
+Task {
+    let location = try await fetchGeoLocation(for: "Jath")     // ⏳ Waits for API 1
+    let weather = try await fetchWeather(lat: location.lat, lon: location.lon) // ⏳ Waits for API 2
+}
+
+
+```
+
 
 
 
