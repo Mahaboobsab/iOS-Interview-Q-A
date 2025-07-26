@@ -742,8 +742,145 @@ Task {
     let location = try await fetchGeoLocation(for: "Jath")     // ⏳ Waits for API 1
     let weather = try await fetchWeather(lat: location.lat, lon: location.lon) // ⏳ Waits for API 2
 }
+```
 
+### Operation Que  
 
+```swift
+import Foundation
+
+// MARK: - Models
+
+struct GeoLocation: Decodable {
+    let lat: Double
+    let lon: Double
+    let name: String
+}
+
+struct WeatherInfo: Decodable {
+    let name: String
+    let main: Main
+}
+
+struct Main: Decodable {
+    let temp: Double
+}
+
+// MARK: - Operation 1: GeoLocation Fetch
+
+class GeoLocationOperation: Operation {
+    let city: String
+    var locationResult: GeoLocation?
+    var error: Error?
+    
+    init(city: String) {
+        self.city = city
+    }
+    
+    override func main() {
+        let semaphore = DispatchSemaphore(value: 0)
+        let urlString = "https://api.openweathermap.org/geo/1.0/direct?q=\(city)&limit=100&appid=f32f36efd5c0cefa353f90cb87fa26d5&countrycode=IN"
+        
+        guard let url = URL(string: urlString) else {
+            print("❌ Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            defer { semaphore.signal() }
+            
+            if let error = error {
+                self.error = error
+                return
+            }
+            
+            guard let data = data else { return }
+
+            do {
+                let result = try JSONDecoder().decode([GeoLocation].self, from: data)
+                self.locationResult = result.first
+            } catch {
+                self.error = error
+            }
+        }.resume()
+        
+        semaphore.wait() // Wait for network task to finish
+    }
+}
+
+// MARK: - Operation 2: Weather Fetch
+
+class WeatherOperation: Operation {
+    let geoOp: GeoLocationOperation
+    var weatherResult: WeatherInfo?
+    var error: Error?
+    
+    init(dependentOn geoOp: GeoLocationOperation) {
+        self.geoOp = geoOp
+    }
+    
+    override func main() {
+        guard let location = geoOp.locationResult else {
+            print("❌ No location data found.")
+            return
+        }
+        
+        let lat = location.lat
+        let lon = location.lon
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=f32f36efd5c0cefa353f90cb87fa26d5"
+        
+        guard let url = URL(string: urlString) else {
+            print("❌ Invalid weather URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            defer { semaphore.signal() }
+            
+            if let error = error {
+                self.error = error
+                return
+            }
+            
+            guard let data = data else { return }
+
+            do {
+                let result = try JSONDecoder().decode(WeatherInfo.self, from: data)
+                self.weatherResult = result
+            } catch {
+                self.error = error
+            }
+        }.resume()
+        
+        semaphore.wait()
+    }
+}
+
+// MARK: - Execution
+
+func startWeatherFetch() {
+    let geoOp = GeoLocationOperation(city: "Gokak")
+    let weatherOp = WeatherOperation(dependentOn: geoOp)
+    
+    weatherOp.addDependency(geoOp)
+
+    let queue = OperationQueue()
+    queue.addOperations([geoOp, weatherOp], waitUntilFinished: true)
+    
+    if let weather = weatherOp.weatherResult {
+        print("✅ City in \(geoOp.city)")
+        print("✅ Weather in \(weather.name): \(weather.main.temp)°K")
+    } else if let error = weatherOp.error ?? geoOp.error {
+        print("❌ Error: \(error.localizedDescription)")
+    } else {
+        print("❌ Unknown error")
+    }
+}
+
+// Call the function
+startWeatherFetch()
 ```
 
 
