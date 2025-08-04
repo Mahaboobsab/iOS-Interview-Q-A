@@ -882,8 +882,34 @@ func startWeatherFetch() {
 // Call the function
 startWeatherFetch()
 ```
+## Question 12: What is CaseIterable?  
 
+- CaseIterable is a protocol. It’s used to automatically generate a collection of all the cases of an enum.
+- Swift automatically synthesizes the allCases property when you conform an enum to the CaseIterable protocol.
+---
+**🔍 What Happens When You Use CaseIterable**  
 
+When you declare an enum like this:  
+```swift
+enum Direction: CaseIterable {
+    case north, south, east, west
+}
+```
+Swift automatically generates this for you behind the scenes:  
+```swift
+extension Direction {
+    static var allCases: [Direction] {
+        return [.north, .south, .east, .west]
+    }
+}
+```
+This means you can now do:  
+
+```swift
+for direction in Direction.allCases {
+    print(direction)
+}
+```
 
 
 
