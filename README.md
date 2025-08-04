@@ -937,6 +937,16 @@ enum Status: CaseIterable {
     }
 }
 ```
+## Question 13: What are the Protocols that Optional Conforms To?  
 
-
+|Protocol|Purpose|
+|--------|------|
+|**ExpressibleByNilLiteral**|Allows Optional to be initialized with nil.|
+|Equatable|Enables comparison using == and != if the wrapped type is Equatable.|
+|Hashable|Allows Optional to be used in sets or as dictionary keys if the wrapped type is Hashable.|
+|Encodable / Decodable|Supports encoding and decoding with Codable if the wrapped type conforms.|
+|CustomStringConvertible|Provides a human-readable description.|
+CustomDebugStringConvertible|Provides a debug description.|
+|Sendable|Ensures thread safety when the wrapped type is Sendable.|
+|CaseIterable|**Not supported** — Optional does not conform to CaseIterable by default.|
 
