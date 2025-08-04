@@ -910,7 +910,33 @@ for direction in Direction.allCases {
     print(direction)
 }
 ```
+---
+**✅ Conditions for Automatic Synthesis**  
 
+Swift will automatically synthesize allCases only if:  
+- The enum has no associated values.
+- All cases are explicitly listed.
+- ❌ Not Synthesized Automatically
+
+```swift
+enum Status: CaseIterable {
+    case success(code: Int)
+    case failure(message: String)
+}
+```
+This will cause a compiler error because Swift cannot infer all possible combinations of associated values.  
+
+You would need to implement allCases manually:  
+```swift
+enum Status: CaseIterable {
+    case success(code: Int)
+    case failure(message: String)
+
+    static var allCases: [Status] {
+        return [.success(code: 200), .failure(message: "Error")]
+    }
+}
+```
 
 
 
