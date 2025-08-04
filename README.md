@@ -948,5 +948,23 @@ enum Status: CaseIterable {
 |CustomStringConvertible|Provides a human-readable description.|
 CustomDebugStringConvertible|Provides a debug description.|
 |Sendable|Ensures thread safety when the wrapped type is Sendable.|
-|CaseIterable|**Not supported** — Optional does not conform to CaseIterable by default.|
+|CaseIterable|**Not supported** — Optional does not conform to CaseIterable by default.|  
+
+## Question 14: In Objective C only reference type can have nil?  
+Yes, In Objective-C, the concept of nil is specific to **object (reference)** types.  
+**✅ Reference Types (Objects)**  
+- In Objective-C, objects (instances of classes) are reference types.
+- These can be assigned nil, which means no object is being referenced.
+```swift
+NSString *name = nil; // Valid
+```
+
+**❌ Value Types (Primitives)**  
+
+- Primitive types like int, float, double, BOOL, etc., are value types.
+- These cannot be assigned nil. Doing so will result in a compiler error.
+```swift
+int age = nil; // ❌ Invalid
+
+```
 
