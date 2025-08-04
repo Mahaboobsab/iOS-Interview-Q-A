@@ -937,7 +937,36 @@ enum Status: CaseIterable {
     }
 }
 ```
-## Question 13: What are the Protocols that Optional Conforms To?  
+
+## Question 13: To which protocol optional is conforms to?  
+
+Optional does conform to the **ExpressibleByNilLiteral** protocol.
+This means you can initialize an optional value using nil directly, like this: 
+```swift
+let name: String? = nil
+```
+Under the hood  
+```swift
+extension Optional: ExpressibleByNilLiteral {
+    public init(nilLiteral: ()) {
+        self = .none
+    }
+}
+```
+
+Other example:  
+```swift
+struct MyNilType: ExpressibleByNilLiteral {
+    init(nilLiteral: ()) {
+        print("Initialized with nil")
+    }
+}
+
+let value: MyNilType = nil
+```
+
+
+## Question 14: What are the Protocols that Optional Can Conforms To?  
 
 |Protocol|Purpose|
 |--------|------|
@@ -950,7 +979,7 @@ CustomDebugStringConvertible|Provides a debug description.|
 |Sendable|Ensures thread safety when the wrapped type is Sendable.|
 |CaseIterable|**Not supported** — Optional does not conform to CaseIterable by default.|  
 
-## Question 14: In Objective C only reference type can have nil?  
+## Question 15: In Objective C only reference type can have nil?  
 Yes, In Objective-C, the concept of nil is specific to **object (reference)** types.  
 **✅ Reference Types (Objects)**  
 - In Objective-C, objects (instances of classes) are reference types.
