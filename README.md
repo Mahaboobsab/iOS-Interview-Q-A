@@ -997,3 +997,49 @@ int age = nil; // ❌ Invalid
 
 ```
 
+## Question 16: Explain Class & Static in swift?  
+
+**🔹 static Keyword**  
+- Used to define type-level properties or methods.  
+- Cannot be overridden by subclasses.  
+- Commonly used in structs, enums, and classes when you don’t want inheritance.
+```swift
+struct MathUtils {
+    static func square(_ number: Int) -> Int {
+        return number * number
+    }
+}
+let result = MathUtils.square(5) // Output: 25
+```
+**🔹 class Keyword**
+- Used only in classes to define type-level methods or properties.
+- Can be overridden by subclasses.
+- Enables polymorphism at the type level.
+
+```swift
+class Animal {
+    class func sound() -> String {
+        return "Some sound"
+    }
+}
+
+class Dog: Animal {
+    override class func sound() -> String {
+        return "Bark"
+    }
+}
+
+print(Dog.sound()) // Output: Bark
+```
+|Keyword|Applicable To|	Can Be Overridden|Use Case|
+|-------|-------------|------------------|--------|
+|static|struct, enum, class|❌ No|Fixed behavior, no inheritance|
+|class|class only|✅ Yes|Allow subclass customization|  
+
+**🔹 Type-Level Members in Swift**  
+
+These are declared using either:  
+
+**static** → for structs, enums, and classes (non-overridable)  
+**class** → for classes only (overridable in subclasses)  
+
