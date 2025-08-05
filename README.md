@@ -1043,3 +1043,49 @@ These are declared using either:
 **static** → for structs, enums, and classes (non-overridable)  
 **class** → for classes only (overridable in subclasses)  
 
+## Question 17: Explain Factory Design Pattern?  
+
+The Factory Design Pattern in Swift is a creational design pattern that provides an interface for creating objects in a superclass,  
+but allows subclasses to alter the type of objects that will be created. It helps encapsulate the object creation logic,  
+making your code more modular, testable, and maintainable.  
+
+**🧠 Core Idea**
+Instead of using init() directly, you use a factory method to create and return instances. This is especially useful when:  
+
+- Object creation is complex.
+- You want to return different types based on conditions.
+- You want to hide the creation logic from the caller.
+```swift
+protocol Notification {
+    func send()
+}
+
+class EmailNotification: Notification {
+    func send() {
+        print("Sending Email Notification")
+    }
+}
+
+class SMSNotification: Notification {
+    func send() {
+        print("Sending SMS Notification")
+    }
+}
+
+class NotificationFactory {
+    static func createNotification(type: String) -> Notification {
+        switch type {
+        case "email":
+            return EmailNotification()
+        case "sms":
+            return SMSNotification()
+        default:
+            fatalError("Unknown notification type")
+        }
+    }
+}
+
+// Usage
+let notification = NotificationFactory.createNotification(type: "email")
+notification.send() // Output: Sending Email Notification
+```
