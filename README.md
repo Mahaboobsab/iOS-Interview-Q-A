@@ -1089,3 +1089,78 @@ class NotificationFactory {
 let notification = NotificationFactory.createNotification(type: "email")
 notification.send() // Output: Sending Email Notification
 ```
+
+## Question 18: What is fallthrough?  
+In Swift, the fallthrough statement is used inside a switch statement to force execution to continue to the next case,  
+even if the next case’s condition doesn’t match.  
+
+**🔍 Why Use fallthrough?**  
+Normally, Swift’s switch statements do not fall through like in C or JavaScript.  
+Once a matching case is found and executed, the switch exits. But if you want to intentionally continue to the next case, you use fallthrough.  
+
+**✅ Example:**  
+```swift
+let value = 2
+
+switch value {
+case 1:
+    print("One")
+case 2:
+    print("Two")
+    fallthrough
+case 3:
+    print("Three")
+default:
+    print("Default")
+}
+```
+
+-------Output-----  
+Two  
+Three  
+
+**⚠️ Important Notes:**  
+fallthrough does not check the condition of the next case.  
+It simply jumps to the next case’s code block.  
+You can’t fall through to a case with a value binding (case let) or where clause unless it’s syntactically valid.  
+
+**🧠 When to Use It?**  
+Use fallthrough sparingly—only when you want to intentionally share logic between cases.  
+In most Swift code, it's better to combine cases or use functions for shared logic.  
+
+**🔐 Scenario: Role-Based Access Control**  
+
+You have different user roles in an app: Guest, User, Moderator, and Admin.  
+Each higher role inherits permissions from the lower ones.  
+
+```swift
+enum Role {
+    case guest, user, moderator, admin
+}
+
+func printPermissions(for role: Role) {
+    switch role {
+    case .guest:
+        print("Can view content")
+    case .user:
+        print("Can comment")
+        fallthrough
+    case .moderator:
+        print("Can delete comments")
+        fallthrough
+    case .admin:
+        print("Can manage users")
+    }
+}
+```
+**🔍 Explanation:**  
+If the role is .user, it prints:  
+Can comment  
+Can delete comments  
+Can manage users  
+Because of fallthrough, it continues executing the next cases regardless of their condition.  
+
+**✅ Why This Is Useful:**  
+
+This pattern helps when permissions or behaviors are cumulative, and you want to avoid repeating logic or combining cases manually.  
+Would you like me to convert this into a SwiftUI demo or playground snippet for hands-on testing?  
