@@ -1167,7 +1167,8 @@ Would you like me to convert this into a SwiftUI demo or playground snippet for 
 
 ## Question 19: GCD & Operation Queue Architecture?  
 
-![GCD](https://github.com/user-attachments/assets/57e8d463-d316-4344-ac51-3cd0a16cc3dc)  
+![gcd 2](https://github.com/user-attachments/assets/a9b4e7b5-7d7d-41cb-9b05-68da9c37eba6)
+
 
 
 
