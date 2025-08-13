@@ -1170,7 +1170,10 @@ Would you like me to convert this into a SwiftUI demo or playground snippet for 
 ![gcd 2](https://github.com/user-attachments/assets/a9b4e7b5-7d7d-41cb-9b05-68da9c37eba6)
 
 
+![OperationQueue](https://github.com/user-attachments/assets/95015678-3a76-4e07-8448-49e17186c7d7)  
+
+## Question 20: What is the purpose of SceneDelegate in iOS?  
+SceneDelegate manages the lifecycle of individual UI scenes (windows). It was introduced in iOS 13 to support multi-window capabilities, especially on iPadOS. It handles scene-specific events like connecting, disconnecting, entering foreground/background, and setting up the UI.  
+<img width="744" height="304" alt="Screenshot 2025-08-13 at 9 55 35 AM" src="https://github.com/user-attachments/assets/8d737f02-d2c6-48c4-b06f-38021fa36829" />
 
 
-
-![OperationQueue](https://github.com/user-attachments/assets/95015678-3a76-4e07-8448-49e17186c7d7)
