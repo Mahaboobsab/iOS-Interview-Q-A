@@ -1176,4 +1176,7 @@ Would you like me to convert this into a SwiftUI demo or playground snippet for 
 SceneDelegate manages the lifecycle of individual UI scenes (windows). It was introduced in iOS 13 to support multi-window capabilities, especially on iPadOS. It handles scene-specific events like connecting, disconnecting, entering foreground/background, and setting up the UI.  
 <img width="744" height="304" alt="Screenshot 2025-08-13 at 9 55 35 AM" src="https://github.com/user-attachments/assets/8d737f02-d2c6-48c4-b06f-38021fa36829" />
 
+## Question 21: What is a Trailing Closure?  
+
+A closure is just a block of code you can pass around.  
 
