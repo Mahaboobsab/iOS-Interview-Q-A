@@ -1183,4 +1183,9 @@ A closure is just a block of code you can pass around.
 
 <img width="756" height="430" alt="Screenshot 2025-08-14 at 10 06 17 PM" src="https://github.com/user-attachments/assets/4b648170-c272-4bed-9910-96c7dee0f32d" />
 
+### Basic Syntax
+---  
+<img width="751" height="515" alt="Screenshot 2025-08-14 at 10 18 30 PM" src="https://github.com/user-attachments/assets/0b9c0586-cec5-4061-b05b-025673893e01" />
+
+
 
