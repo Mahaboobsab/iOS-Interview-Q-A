@@ -1180,3 +1180,7 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 
 A closure is just a block of code you can pass around.  
 
+
+<img width="756" height="430" alt="Screenshot 2025-08-14 at 10 06 17 PM" src="https://github.com/user-attachments/assets/4b648170-c272-4bed-9910-96c7dee0f32d" />
+
+
