@@ -1194,9 +1194,9 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 
 **🔹 Roles Involved:**  
 
-Business Analyst / Product Owner: Gathers and defines requirements.
+**Business Analyst / Product Owner:** Gathers and defines requirements.
 
-Development Team: Builds the software based on those requirements.
+**Development Team:** Builds the software based on those requirements.
 
 **🔹 Flow of Work:**  
 
