@@ -1188,4 +1188,27 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 <img width="751" height="515" alt="Screenshot 2025-08-14 at 10 18 30 PM" src="https://github.com/user-attachments/assets/0b9c0586-cec5-4061-b05b-025673893e01" />
 
 
+## Question 21: Explain SCRUM?  
+
+**🧩 Slide 1: Requirement Breakdown**  
+
+**🔹 Roles Involved:**  
+
+Business Analyst / Product Owner: Gathers and defines requirements.
+
+Development Team: Builds the software based on those requirements.
+
+**🔹 Flow of Work:**  
+
+**Feature**: A high-level capability (e.g., Attendance Module).
+
+**Epic**: A large chunk of work under that feature (e.g., Student Attendance).
+
+**User Story**: A specific task or functionality (e.g., “Add Student Attendance”).
+
+✅ This breakdown ensures clarity, traceability, and focus during development.
+
+
+<img width="589" height="636" alt="SCRUM" src="https://github.com/user-attachments/assets/f66237c4-f6de-4539-bb45-6911df74355a" />
+
 
