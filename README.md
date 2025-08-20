@@ -1215,5 +1215,7 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 ![Core data stack](https://github.com/user-attachments/assets/c59395a4-62ed-458d-8296-da5f1472214b)
 
 
+<img width="341" height="512" alt="ccc" src="https://github.com/user-attachments/assets/90164a0a-a699-4ea5-91cd-62e21a235ba3" />
+
 
 
