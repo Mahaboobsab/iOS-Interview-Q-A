@@ -1217,5 +1217,141 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 
 <img width="341" height="512" alt="ccc" src="https://github.com/user-attachments/assets/90164a0a-a699-4ea5-91cd-62e21a235ba3" />
 
+## Question 22: Explain Repository Pattern?  
+
+"The Repository Pattern is a design pattern that separates the business logic from the data access logic by providing a clean interface to interact with data sources like databases or APIs."  
+
+**🔑 Key Points to Remember**
+- It acts like a middleman between your app and the data.
+- You interact with the repository, not directly with the database or API.
+- Makes your code cleaner, testable, and easier to maintain.
+
+**🎯 Quick Analogy (Optional in Interview)**  
+
+**"Think of it like a library. You don’t go to the storage room to find a book—you ask the librarian (repository), who knows where to get it."**  
+
+**📦 Example in Swift (iOS Context)**  
+
+Let’s say you’re building a ToDo app. You have a Task model and want to fetch tasks from a local database or a remote API.  
+
+**1. Model**
+```swift
+struct Task {
+    let id: Int
+    let title: String
+    let isCompleted: Bool
+}
+```
+**2. Repository Protocol**  
+```swift
+protocol TaskRepository {
+    func fetchTasks() -> [Task]
+    func addTask(_ task: Task)
+    func deleteTask(by id: Int)
+}
+```
+**3. Concrete Implementation (e.g., Local DB)**  
+```swift
+class LocalTaskRepository: TaskRepository {
+    private var tasks: [Task] = []
+
+    func fetchTasks() -> [Task] {
+        return tasks
+    }
+
+    func addTask(_ task: Task) {
+        tasks.append(task)
+    }
+
+    func deleteTask(by id: Int) {
+        tasks.removeAll { $0.id == id }
+    }
+}
+```
+
+**4. Usage in ViewModel**  
+```swift
+class TaskViewModel {
+    private let repository: TaskRepository
+
+    init(repository: TaskRepository) {
+        self.repository = repository
+    }
+
+    func getAllTasks() -> [Task] {
+        return repository.fetchTasks()
+    }
+}
+```
+**🧠 How to Explain in an Interview**
+"I use the Repository Pattern to abstract the data layer from my business logic.  
+For example, in a ToDo app, I define a TaskRepository protocol and implement it with a LocalTaskRepository.  
+This allows me to swap data sources easily and write unit tests for my ViewModel without depending on actual data storage.  
+
+**🧪 Unit Test Example in Swift (Using XCTest)**  
+
+Let’s write test cases for the TaskViewModel using a mock repository.  
+
+**1. Mock Repository**  
+```swift
+class MockTaskRepository: TaskRepository {
+    var tasks: [Task] = [
+        Task(id: 1, title: "Buy groceries", isCompleted: false),
+        Task(id: 2, title: "Walk the dog", isCompleted: true)
+    ]
+
+    func fetchTasks() -> [Task] {
+        return tasks
+    }
+
+    func addTask(_ task: Task) {
+        tasks.append(task)
+    }
+
+    func deleteTask(by id: Int) {
+        tasks.removeAll { $0.id == id }
+    }
+}
+```
+**2. Test Case for ViewModel**  
+```swift
+import XCTest
+
+class TaskViewModelTests: XCTestCase {
+    var viewModel: TaskViewModel!
+    var mockRepository: MockTaskRepository!
+
+    override func setUp() {
+        super.setUp()
+        mockRepository = MockTaskRepository()
+        viewModel = TaskViewModel(repository: mockRepository)
+    }
+
+    func testFetchTasksReturnsCorrectCount() {
+        let tasks = viewModel.getAllTasks()
+        XCTAssertEqual(tasks.count, 2)
+    }
+
+    func testAddTaskIncreasesCount() {
+        let newTask = Task(id: 3, title: "Read book", isCompleted: false)
+        mockRepository.addTask(newTask)
+        let tasks = viewModel.getAllTasks()
+        XCTAssertEqual(tasks.count, 3)
+    }
+
+    func testDeleteTaskDecreasesCount() {
+        mockRepository.deleteTask(by: 1)
+        let tasks = viewModel.getAllTasks()
+        XCTAssertEqual(tasks.count, 1)
+    }
+}
+```
+**🧠 How to Explain in an Interview**  
+
+"The Repository Pattern allows me to mock data sources during unit testing.  
+For example, I create a MockTaskRepository to simulate task data and test my TaskViewModel independently.  
+This ensures my business logic is correct without relying on actual database or network calls."
+
+
 
 
