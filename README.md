@@ -1252,7 +1252,7 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 |-------|------------------------|-----------------------|
 |Complexity|	Simple|	Complex|
 |Setup|	Automatic|	Manual|
-|Mapping| Model Required|	No|	Yes|
+|Mapping Model Required|	No|	Yes|
 |Custom Logic|	No|	Often Yes|
 |Typical Use Case|	Add/rename attributes|	Merge/split entities, type change|
 
