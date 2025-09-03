@@ -1396,6 +1396,80 @@ This ensures my business logic is correct without relying on actual database or 
 ## Question 23: 🧠 What Is a Use Case?  
 
 A Use Case is a class or struct that encapsulates a specific task your app performs.  
-It’s often called an Interactor in VIPER or UseCase in Clean Architecture. It defines what the app does, not how the UI looks.
+It’s often called an Interactor in VIPER or UseCase in Clean Architecture. It defines what the app does, not how the UI looks.  
+
+## Question 24: NSURLSession  
+# NSURLSession Interview Questions & Answers
+
+## 🟢 Basic Level
+
+### 1. What is `NSURLSession` and why is it used?
+`NSURLSession` is a class used to perform network data tasks like downloading, uploading, and fetching data from web services. It replaces older APIs like `NSURLConnection` and provides better support for background tasks, caching, and configuration.
+
+### 2. What are the different types of `NSURLSession` configurations?
+- `default`: Stores cookies, credentials, and caches.
+- `ephemeral`: Doesn’t store cookies, credentials, or caches—good for privacy.
+- `background`: Allows tasks to continue even if the app is suspended or terminated.
+
+### 3. How do you make a simple GET request using `NSURLSession`?
+```swift
+let url = URL(string: "https://api.example.com/data")!
+let task = URLSession.shared.dataTask(with: url) { data, response, error in
+    if let data = data {
+        // Handle response
+    }
+}
+task.resume()
+```
+
+### 4. What is the difference between `dataTask`, `downloadTask`, and `uploadTask`?
+- `dataTask`: For small data transfers (e.g., JSON APIs).
+- `downloadTask`: For downloading files to disk.
+- `uploadTask`: For uploading files or data to a server.
+
+### 5. How do you handle errors in a `NSURLSession` request?
+Check the `error` object in the completion handler. Also validate the `HTTPURLResponse` status code and ensure `data` is not nil.
+
+## 🟡 Intermediate Level
+
+### 6. How does `NSURLSession` handle caching?
+It uses `URLCache` and respects HTTP cache headers. You can customize caching behavior using `URLSessionConfiguration`.
+
+### 7. What is the role of `URLSessionDelegate`?
+It allows handling authentication challenges, redirection, and background task completion. You can also monitor task-level events like progress and errors.
+
+### 8. How do you handle authentication challenges in `NSURLSession`?
+Implement `urlSession(_:didReceive:completionHandler:)` in the delegate to respond to server trust or basic auth challenges.
+
+### 9. How do you cancel a running task in `NSURLSession`?
+Call `.cancel()` on the task:
+```swift
+task.cancel()
+```
+
+### 10. How do you track progress for a file download or upload?
+Use `URLSessionDownloadDelegate` or `URLSessionTaskDelegate` methods like:
+- `urlSession(_:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)`
+- `urlSession(_:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:)`
+
+## 🔴 Advanced Level
+
+### 11. How does `NSURLSession` work in the background with `backgroundSessionConfiguration`?
+It creates a session that continues tasks even if the app is suspended. The system wakes the app when the task completes and calls the delegate method `urlSessionDidFinishEvents(forBackgroundURLSession:)`.
+
+### 12. Explain how to resume a download after the app is terminated.
+Use `downloadTask(withResumeData:)` with resume data captured from `cancel(byProducingResumeData:)`. Store the resume data persistently.
+
+### 13. How do you implement retry logic for failed requests using `NSURLSession`?
+Wrap the request in a retry mechanism using exponential backoff. Retry based on error type or status code (e.g., 500, 503).
+
+### 14. What are the security considerations when using `NSURLSession` (e.g., SSL pinning)?
+Use `urlSession(_:didReceive:completionHandler:)` to validate server certificates manually. This helps prevent man-in-the-middle attacks.
+
+### 15. How would you design a network layer using `NSURLSession` that supports dependency injection and testability?
+- Abstract `URLSession` behind a protocol.
+- Inject mock sessions for unit testing.
+- Use a service layer to encapsulate API logic.
+- Handle parsing, error handling, and retries in a centralized way.
 
 
