@@ -1215,7 +1215,47 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 ![Core data stack](https://github.com/user-attachments/assets/c59395a4-62ed-458d-8296-da5f1472214b)
 
 
-<img width="341" height="512" alt="ccc" src="https://github.com/user-attachments/assets/90164a0a-a699-4ea5-91cd-62e21a235ba3" />
+<img width="341" height="512" alt="ccc" src="https://github.com/user-attachments/assets/90164a0a-a699-4ea5-91cd-62e21a235ba3" />  
+
+**🔹 Lightweight Migration**  
+
+**✅ Use When:**
+- Changes to the data model are simple and non-destructive.
+- You’re adding or renaming attributes, entities, or relationships.
+- You’re not changing the underlying structure in a way that requires custom logic.
+**💡 Examples:**
+  
+- Adding a new attribute to an existing entity (e.g., isFavorite: Bool).
+- Renaming an attribute using renamingIdentifier.
+- Adding a new entity without affecting existing ones.
+- Making a relationship optional or changing its delete rule.
+
+**🔸 Heavyweight Migration**  
+**✅ Use When:**  
+
+- Changes are complex or destructive.
+- You’re removing entities or attributes.
+- You’re changing attribute types (e.g., String to Int).
+- You need to transform data during migration.
+- You’re merging or splitting entities.
+
+**💡 Examples:**  
+
+- Splitting one entity into two (e.g., User → Profile + Account).
+- Changing a relationship from one-to-many to many-to-many.
+- Converting a String attribute to a Date.
+- Removing an attribute that’s no longer needed.
+
+**🔄 Summary Table**  
+
+|Feature|	Lightweight Migration|	Heavyweight Migration|
+|-------|------------------------|-----------------------|
+|Complexity|	Simple|	Complex|
+|Setup|	Automatic|	Manual|
+|Mapping| Model Required|	No|	Yes|
+|Custom Logic|	No|	Often Yes|
+|Typical Use Case|	Add/rename attributes|	Merge/split entities, type change|
+
 
 ## Question 22: Explain Repository Pattern?  
 
