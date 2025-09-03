@@ -1353,5 +1353,9 @@ For example, I create a MockTaskRepository to simulate task data and test my Tas
 This ensures my business logic is correct without relying on actual database or network calls."
 
 
+## Question 23: 🧠 What Is a Use Case?  
+
+A Use Case is a class or struct that encapsulates a specific task your app performs.  
+It’s often called an Interactor in VIPER or UseCase in Clean Architecture. It defines what the app does, not how the UI looks.
 
 
