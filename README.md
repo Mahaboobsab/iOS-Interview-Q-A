@@ -1473,3 +1473,25 @@ Use `urlSession(_:didReceive:completionHandler:)` to validate server certificate
 - Handle parsing, error handling, and retries in a centralized way.
 
 
+### Question 25: Q: What’s the difference between Git rebase and merge? Can you explain with an example?
+
+
+"Both git **merge** and git **rebase** are used to integrate changes from one branch into another, but they handle history differently.  
+
+When I use git merge, Git creates a new merge commit that ties together the histories of both branches.  
+This is useful in collaborative environments where preserving the exact timeline of contributions is important.   
+However, it can lead to a cluttered commit history, especially with frequent merges.
+
+On the other hand, git rebase rewrites the commit history by replaying my feature branch commits on top of the latest main.  
+This results in a clean, linear history — which is ideal for solo development or preparing a branch before merging.   
+I recently used rebase in my SwiftUI project to move feature branch changes onto main.  
+Instead of merging, I rebased main onto the feature branch, resolved a few conflicts, and then force-pushed main. This made the commit history easier to read and avoided unnecessary merge commits.  
+
+
+**In short:**  
+
+
+**Merge** preserves history and shows when branches were combined.  
+
+**Rebase** rewrites history to make it look like changes were made sequentially. I choose based on context — merge for collaboration, rebase for clarity."
+
