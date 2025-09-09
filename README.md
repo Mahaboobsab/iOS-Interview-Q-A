@@ -1495,4 +1495,33 @@ Instead of merging, I rebased main onto the feature branch, resolved a few confl
 
 **Rebase** rewrites history to make it look like changes were made sequentially. I choose based on context — merge for collaboration, rebase for clarity."
 
-## Question 26: What is the main difference between Generics and Associated Types?
+## Question 26: What is the main difference between Generics and Associated Types?  
+
+| **Generics**                           | **Associated Types**                |
+| -------------------------------------- | ----------------------------------- |
+| Defined on functions, structs, classes | Defined inside protocols            |
+| Type decided by **caller**             | Type decided by **conforming type** |
+| Best for algorithms & containers       | Best for protocol abstraction       |
+
+```swift
+// Using generics
+func swapValues<T>(_ a: inout T, _ b: inout T) {
+    let temp = a
+    a = b
+    b = temp
+}
+
+// Using associated type
+protocol Swappable {
+    associatedtype Value
+    mutating func swap(_ a: inout Value, _ b: inout Value)
+}
+
+struct IntSwapper: Swappable {
+    func swap(_ a: inout Int, _ b: inout Int) {
+        let temp = a
+        a = b
+        b = temp
+    }
+}
+```
