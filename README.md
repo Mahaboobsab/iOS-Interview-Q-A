@@ -1495,3 +1495,4 @@ Instead of merging, I rebased main onto the feature branch, resolved a few confl
 
 **Rebase** rewrites history to make it look like changes were made sequentially. I choose based on context — merge for collaboration, rebase for clarity."
 
+## Question 26: What is the main difference between Generics and Associated Types?
