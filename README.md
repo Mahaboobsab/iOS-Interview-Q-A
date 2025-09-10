@@ -1589,4 +1589,158 @@ Think of **architecture** as the **blueprint of a house** (how rooms are laid ou
 - Use **design patterns** to solve specific problems within that structure.
 - Both are essential for writing clean, maintainable, and scalable iOS code.
 
+## Question 28: What is Facade design pattern?  
 
+- The Facade pattern provides a single, simplified interface to a complex system, hiding its internal details and making it easier for the client to use.
+- **Facade = One easy door to many complex rooms.**
+
+**Example**:  
+
+**UIKit → UIImage:** Internally deals with Core Graphics, file handling, and memory, but provides a simple interface (UIImage(named:)).
+
+**URLSession**: Acts as a facade over lower-level networking APIs like CFNetwork and sockets.
+
+**AVPlayer**: Provides a high-level interface to play media, hiding the complexity of AVFoundation.  
+
+**Example:**  
+```swift
+// Subsystems
+class AudioPlayer {
+    func playAudio() { print("Playing audio...") }
+}
+
+class VideoPlayer {
+    func playVideo() { print("Playing video...") }
+}
+
+class Subtitles {
+    func loadSubtitles() { print("Loading subtitles...") }
+}
+
+// Facade
+class MediaFacade {
+    private let audio = AudioPlayer()
+    private let video = VideoPlayer()
+    private let subs = Subtitles()
+    
+    func playMovie() {
+        audio.playAudio()
+        video.playVideo()
+        subs.loadSubtitles()
+        print("Movie started 🎬")
+    }
+}
+
+// Client Code
+let media = MediaFacade()
+media.playMovie()
+```
+**1️⃣ Without Facade – Raw URLSession**  
+If you use URLSession directly, the client code has to deal with:
+- Building requests (URLRequest).
+- Handling URLSession.dataTask.
+- Checking errors.
+- Checking HTTP status codes.
+- Parsing JSON.
+- Cancel/resume tasks manually.
+- Example (raw usage):
+
+```swift
+let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
+
+let task = URLSession.shared.dataTask(with: url) { data, response, error in
+    if let error = error {
+        print("Error: \(error)")
+        return
+    }
+
+    guard let httpResponse = response as? HTTPURLResponse,
+          httpResponse.statusCode == 200 else {
+        print("Invalid response")
+        return
+    }
+
+    guard let data = data else {
+        print("No data received")
+        return
+    }
+
+    // Parse JSON
+    do {
+        let posts = try JSONDecoder().decode([Post].self, from: data)
+        print(posts)
+    } catch {
+        print("Decoding error: \(error)")
+    }
+}
+task.resume()
+```
+**2️⃣ With Facade – NetworkManager**  
+
+Now, let’s see what happens when we add a Facade (NetworkManager):  
+```swift
+struct Post: Codable {
+    let id: Int
+    let title: String
+}
+
+// Facade
+class NetworkManager {
+    static let shared = NetworkManager()
+    private init() {}
+    
+    func fetch<T: Decodable>(_ type: T.Type, from url: URL, completion: @escaping (Result<T, Error>) -> Void) {
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode),
+                  let data = data else {
+                completion(.failure(NSError(domain: "InvalidResponse", code: 0)))
+                return
+            }
+            
+            do {
+                let decoded = try JSONDecoder().decode(T.self, from: data)
+                completion(.success(decoded))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
+}
+```
+Usage (client side):
+```swift
+let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
+
+NetworkManager.shared.fetch([Post].self, from: url) { result in
+    switch result {
+    case .success(let posts):
+        print("✅ Got \(posts.count) posts")
+    case .failure(let error):
+        print("❌ Error: \(error)")
+    }
+}
+```
+**3️⃣ Why this is Facade?**
+
+- Client only calls one method (fetch) instead of dealing with URLSession, error checks, and decoding.
+- Complex subsystems hidden:
+- URLSession.dataTask → hidden
+- JSONDecoder → hidden
+- HTTPURLResponse validation → hidden
+- Unified & clean API: just pass a URL + expected type.
+- Reusability: Any screen needing networking can use the same facade without duplicating boilerplate code.
+
+**4️⃣ Key Idea**  
+
+**Subsystem** = URLSession, JSONDecoder, Error handling, etc.
+**Facade** = NetworkManager which exposes one simple entry point.
+**Client** = Your ViewModel or ViewController which consumes a clean API without worrying about internals.  
+
+**NetworkManager acts as a Facade because it simplifies the complex networking workflow (URLSession, response validation, JSON decoding) into a single clean API for clients to use. Clients don’t need to know how URLSession or JSONDecoder works — they just call one method**
