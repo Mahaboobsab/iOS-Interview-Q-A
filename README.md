@@ -1525,3 +1525,68 @@ struct IntSwapper: Swappable {
     }
 }
 ```
+## Question 27:Difference between Architecture vs Design Patterns in iOS?
+
+Understanding the difference between **architecture** and **design patterns** is crucial for building scalable and maintainable iOS applications.
+
+---
+
+## 🏛️ Architecture (High-Level Structure)
+
+**Definition**: Architecture defines the overall structure of your app — how components like UI, business logic, and data interact.
+
+### Common iOS Architectures:
+- **MVC (Model-View-Controller)** – Apple's default, but can lead to "Massive View Controllers".
+- **MVVM (Model-View-ViewModel)** – Separates UI logic from business logic.
+- **VIPER** – Highly modular, used in large-scale apps.
+- **Clean Architecture** – Focuses on separation of concerns and testability.
+
+### Purpose:
+- Organize codebase
+- Improve scalability and testability
+- Define how layers communicate
+
+---
+
+## 🧩 Design Patterns (Low-Level Solutions)
+
+**Definition**: Design patterns are reusable solutions to common problems in software design. They are building blocks used within an architecture.
+
+### Common iOS Design Patterns:
+- **Singleton** – Shared instance (e.g., `UserDefaults`, `URLSession`)
+- **Observer** – Used in `NotificationCenter`, Combine, KVO
+- **Delegate** – Used in `UITableViewDelegate`, etc.
+- **Facade** – Simplifies complex subsystems
+- **Factory**, **Builder**, **Strategy**, etc.
+
+### Purpose:
+- Solve specific design problems
+- Improve code reusability and flexibility
+- Used within architectural layers
+
+---
+
+## 🧠 Analogy
+
+Think of **architecture** as the **blueprint of a house** (how rooms are laid out), and **design patterns** as the **furniture and tools** you use inside each room to make it functional.
+
+---
+
+## ✅ Summary Table
+
+| Aspect              | Architecture                     | Design Pattern                        |
+|---------------------|----------------------------------|----------------------------------------|
+| **Scope**           | High-level structure             | Low-level reusable solutions           |
+| **Examples**        | MVC, MVVM, VIPER, Clean Arch     | Singleton, Observer, Facade, Delegate  |
+| **Purpose**         | Organize app layers              | Solve specific design problems         |
+| **Usage**           | App-wide                         | Within classes/modules                 |
+
+---
+
+## 📌 Conclusion
+
+- Use **architecture** to define how your app is structured.
+- Use **design patterns** to solve specific problems within that structure.
+- Both are essential for writing clean, maintainable, and scalable iOS code.
+
+
