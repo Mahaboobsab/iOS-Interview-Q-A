@@ -1743,4 +1743,100 @@ NetworkManager.shared.fetch([Post].self, from: url) { result in
 **Facade** = NetworkManager which exposes one simple entry point.
 **Client** = Your ViewModel or ViewController which consumes a clean API without worrying about internals.  
 
-**NetworkManager acts as a Facade because it simplifies the complex networking workflow (URLSession, response validation, JSON decoding) into a single clean API for clients to use. Clients don’t need to know how URLSession or JSONDecoder works — they just call one method**
+**NetworkManager acts as a Facade because it simplifies the complex networking workflow (URLSession, response validation, JSON decoding) into a single clean API for clients to use. Clients don’t need to know how URLSession or JSONDecoder works — they just call one method**  
+
+## Question 29: What is KVC & KVO?  
+
+**✅ KVC (Key-Value Coding)**  
+
+KVC is a mechanism in iOS that allows you to **access and modify object properties** using string keys instead of direct property access.  
+It’s useful for dynamic data handling, like updating properties from a dictionary or JSON.  
+```swift
+person.setValue("Mahaboob", forKey: "name")
+```
+
+**✅ KVO (Key-Value Observing)**  
+
+KVO lets you observe changes to property values and respond when they change.  
+It’s commonly used for UI updates or reactive behavior when a model changes.  
+
+```swift
+person.observe(\.name, options: [.new]) { _, change in
+    print("Name changed to \(change.newValue!)")
+}
+```
+**KVC (Key-Value Coding) and KVO (Key-Value Observing) are not design patterns in the traditional sense like MVC, MVVM, or Singleton.  
+Instead, they are mechanisms or features provided by the Objective-C runtime (and available in Swift via bridging) that enable dynamic behavior in your code.**  
+
+In Swift, especially with SwiftUI, these are largely replaced by Combine and property wrappers like **@Published, @ObservedObject**, etc.  
+
+**🎯 Scenario: Profile Update in a Banking App**  
+
+Imagine you're building a banking app. There's a user profile screen where the user's name, email, and balance are displayed. You want to:  
+- Dynamically update the UI when the user's balance changes.  
+- Access user properties using strings for flexible data handling (e.g., from JSON or form inputs).
+
+```swift
+//MARK: 🔹 Step 1: Define the Model
+class User: NSObject {
+    @objc dynamic var name: String
+    @objc dynamic var email: String
+    @objc dynamic var balance: Double
+
+    init(name: String, email: String, balance: Double) {
+        self.name = name
+        self.email = email
+        self.balance = balance
+    }
+}
+
+//MARK: 🔹 Step 2: Use KVC to Update Properties from a Dictionary
+
+let user = User(name: "Mahaboob", email: "mahaboob@example.com", balance: 1000.0)
+
+let updateDict: [String: Any] = [
+    "name": "Mahaboobsab Nadaf",
+    "balance": 1500.0
+]
+
+for (key, value) in updateDict {
+    user.setValue(value, forKey: key) // 🔥 KVC in action
+}
+
+//MARK: 🔹 Step 3: Use KVO to Observe Balance Changes
+
+class BalanceObserver {
+    var observation: NSKeyValueObservation?
+
+    init(user: User) {
+        observation = user.observe(\.balance, options: [.new]) { _, change in
+            print("💰 Balance updated to: \(change.newValue ?? 0.0)")
+            // You can trigger a UI update here
+        }
+    }
+}
+
+let observer = BalanceObserver(user: user)
+user.balance = 2000.0 // 🔥 KVO triggers observer
+```
+
+**🧠 Summary**  
+
+**KVC/KVO:** Powerful but legacy. Still useful when working with Objective-C APIs or dynamic behavior.
+**Property Observers (didSet):** Great for simple, local change tracking.
+**Property Wrappers (@Published)**: Modern, reactive, and preferred in SwiftUI/Combine.  
+
+**Compare between KVC/KVO vs Property Observers vs Property Wrappers**  
+
+| Feature                | KVC (Key-Value Coding)                            | KVO (Key-Value Observing)                          | Property Observers (`willSet` / `didSet`)         | Property Wrappers (`@Published`, etc.)            |
+|------------------------|---------------------------------------------------|----------------------------------------------------|---------------------------------------------------|---------------------------------------------------|
+| **Purpose**            | Access/set properties using string keys          | Observe property changes at runtime                | React to property changes locally                 | Add behavior to properties (e.g., observation)    |
+| **Requires**           | `NSObject` + `@objc`                             | `NSObject` + `@objc dynamic`                       | Native Swift                                      | Native Swift + Combine/SwiftUI                   |
+| **Scope**              | Dynamic access from anywhere                     | External observation supported                     | Internal to the class                             | External observation via Combine/SwiftUI         |
+| **Use Case**           | JSON parsing, dynamic forms                      | UI updates, bindings (legacy)                      | Logging, validation, internal triggers            | Reactive UI updates, state management            |
+| **SwiftUI Friendly**   | ❌ Not recommended                                | ❌ Legacy approach                                 | ❌ Not reactive                                    | ✅ Fully reactive                                 |
+| **Combine Support**    | ❌ No                                             | ❌ No                                               | ❌ No                                              | ✅ Yes                                             |
+| **Customization**      | Limited                                           | Limited                                            | Limited                                           | Highly customizable                              |
+| **Example**            | `setValue(_:forKey:)`                            | `observe(_:options:changeHandler:)`                | `didSet { ... }`                                  | `@Published var name: String`                    |
+
+
