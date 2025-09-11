@@ -2159,3 +2159,57 @@ context.load(name: "logo") { image in
 
 This is how libraries like SDWebImage or Kingfisher internally work — they try cache → disk → network.
 Each step is basically a strategy.
+
+## Question 32: What is Command Design Pattern?  
+
+**In iOS, I can use Command pattern to wrap actions like ‘Turn Light On’ or ‘Fetch Data’ into objects, so the invoker (UI) doesn’t need to know how the action is executed. It also allows undo and scheduling of actions.”**  
+
+Command is a behavioral design pattern that turns a request into a standalone object containing all the information about the request.
+This allows you to parameterize methods with different requests, delay or queue execution, and support undo/redo operations.
+
+**🔧 Real-Life Analogy**
+- Think of a TV Remote Control 📺:
+- Each button (Command) knows how to execute a specific action on the TV (Receiver).
+- The remote (Invoker) doesn’t know how the TV works — it just sends commands.
+- You can also undo (go back to previous channel, turn volume down, etc.).
+
+**Example**: Note app, Any kind of design app or IOT projects.
+
+```swift
+import UIKit
+
+// Receiver
+class Light {
+    func on() { print("💡 ON") }
+    func off() { print("💡 OFF") }
+}
+
+// Command
+protocol Command {
+    func execute()
+    func undo()
+}
+
+class LightOnCommand: Command {
+    let light: Light
+    init(_ light: Light) { self.light = light }
+    func execute() { light.on() }
+    func undo() { light.off() }
+}
+
+// Invoker
+class Remote {
+    var command: Command?
+    func pressButton() { command?.execute() }
+    func pressUndo() { command?.undo() }
+}
+
+// Usage
+let light = Light()
+let onCommand = LightOnCommand(light)
+let remote = Remote()
+
+remote.command = onCommand
+remote.pressButton()   // 💡 ON
+remote.pressUndo()     // 💡 OFF
+```
