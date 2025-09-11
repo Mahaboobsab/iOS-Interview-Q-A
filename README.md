@@ -1583,6 +1583,23 @@ Think of **architecture** as the **blueprint of a house** (how rooms are laid ou
 
 ---
 
+| Design Pattern       | Description                                                                 | Common Usage in iOS                                      |
+|----------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------|
+| **Singleton**         | Ensures a class has only one instance and provides a global access point.  | `UserDefaults`, `UIApplication.shared`, `URLSession.shared` |
+| **Observer**          | Allows objects to be notified of changes in other objects.                 | `NotificationCenter`, `KVO`, `Combine`, `@Published`       |
+| **Delegate**          | Enables one object to act on behalf of another.                            | `UITableViewDelegate`, `UICollectionViewDelegate`          |
+| **Facade**            | Provides a simplified interface to a complex subsystem.                    | `AVFoundation`, `CoreData` wrappers                        |
+| **Factory**           | Creates objects without specifying the exact class.                        | `UIViewController.instantiate()` from Storyboard           |
+| **MVC (Model-View-Controller)** | Separates concerns into model, view, and controller.                     | UIKit architecture                                        |
+| **MVVM (Model-View-ViewModel)** | Separates UI logic from business logic using ViewModel.                  | SwiftUI, Combine-based apps                               |
+| **Builder**           | Constructs complex objects step-by-step.                                   | `URLRequest` configuration, custom UI components           |
+| **Strategy**          | Enables selecting an algorithm at runtime.                                 | Custom layout strategies, sorting/filtering logic          |
+| **Adapter**           | Converts one interface to another.                                         | Bridging Objective-C and Swift, protocol extensions        |
+| **Command**           | Encapsulates a request as an object.                                       | Undo/Redo operations, UI actions                          |
+| **Composite**         | Treats individual objects and compositions uniformly.                      | View hierarchies (`UIView` containing subviews)            |
+| **Template Method**   | Defines the skeleton of an algorithm, deferring steps to subclasses.       | `UIViewController` lifecycle methods (`viewDidLoad`, etc.) |
+
+
 ## 📌 Conclusion
 
 - Use **architecture** to define how your app is structured.
