@@ -1870,23 +1870,43 @@ Adapter helps us reuse existing classes/libraries without modifying them, by pro
 ```swift
 import Foundation
 import CoreLocation
+import UIKit
 
 // MARK: - Target Protocol
-// This is what our app expects
 protocol LocationProvider {
-    func getLocation() -> String
+    func getLocation(completion: @escaping (String) -> Void)
 }
 
-// MARK: - Adaptee (Incompatible Interface)
-// Apple service returns CLLocation, which our app cannot use directly
-class AppleLocationService {
-    func currentLocation() -> CLLocation {
-        return CLLocation(latitude: 12.9716, longitude: 77.5946) // Bangalore
+// MARK: - Adaptee
+// Apple service provides location using CLLocationManager (delegate-based API)
+class AppleLocationService: NSObject, CLLocationManagerDelegate {
+    private let manager = CLLocationManager()
+    private var completion: ((CLLocation) -> Void)?
+    
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.requestWhenInUseAuthorization()
+    }
+    
+    func requestLocation(completion: @escaping (CLLocation) -> Void) {
+        self.completion = completion
+        manager.requestLocation()
+    }
+    
+    // Delegate method
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            completion?(location)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("❌ Location error: \(error.localizedDescription)")
     }
 }
 
 // MARK: - Adapter
-// Converts AppleLocationService into LocationProvider
 class LocationAdapter: LocationProvider {
     private let appleService: AppleLocationService
     
@@ -1894,39 +1914,42 @@ class LocationAdapter: LocationProvider {
         self.appleService = service
     }
     
-    func getLocation() -> String {
-        let location = appleService.currentLocation()
-        return "Lat: \(location.coordinate.latitude), Lng: \(location.coordinate.longitude)"
+    func getLocation(completion: @escaping (String) -> Void) {
+        appleService.requestLocation { location in
+            let formatted = "Lat: \(location.coordinate.latitude), Lng: \(location.coordinate.longitude)"
+            completion(formatted)
+        }
     }
 }
 
 // MARK: - Client
-// Our app works only with LocationProvider, not AppleLocationService directly
 class LocationApp {
-    private let locationProvider: LocationProvider
+    private let provider: LocationProvider
     
     init(provider: LocationProvider) {
-        self.locationProvider = provider
+        self.provider = provider
     }
     
     func showLocation() {
-        print("📍 Current Location -> \(locationProvider.getLocation())")
+        provider.getLocation { location in
+            print("📍 Current Location -> \(location)")
+        }
     }
 }
 
 // MARK: - Usage
-let appleService = AppleLocationService()              // Adaptee
-let adapter = LocationAdapter(service: appleService)   // Adapter
-let app = LocationApp(provider: adapter)               // Client
+let service = AppleLocationService()               // Adaptee
+let adapter = LocationAdapter(service: service)    // Adapter
+let app = LocationApp(provider: adapter)           // Client
 app.showLocation()
+
 ```
 **🖥 Output**  
 ```yml
 📍 Current Location -> Lat: 12.9716, Lng: 77.5946
 ```
-**✅ Key Points in This Example**
+✅ Key Points
 
-- **LocationProvider** = Target interface expected by client.
-- **AppleLocationService** = Adaptee (incompatible API).
-- **LocationAdapter** = Adapter (bridge between Adaptee & Target).
-- **LocationApp** = Client that uses LocationProvider without worrying about CoreLocation.
+- **AppleLocationService** (Adaptee) internally uses CLLocationManagerDelegate to fetch the actual location.
+- **LocationAdapter** converts it into the LocationProvider interface our app expects.
+- **The client (LocationApp)** only sees the getLocation method with a nice, simple String.
