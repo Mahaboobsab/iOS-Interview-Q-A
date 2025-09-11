@@ -1953,3 +1953,87 @@ app.showLocation()
 - **AppleLocationService** (Adaptee) internally uses CLLocationManagerDelegate to fetch the actual location.
 - **LocationAdapter** converts it into the LocationProvider interface our app expects.
 - **The client (LocationApp)** only sees the getLocation method with a nice, simple String.
+
+## Question 30: What is Builder Pattern?  
+
+**Builder is a creational design pattern that lets you construct complex objects step by step.**  
+
+Builder pattern is used when we want to construct complex objects step by step instead of passing everything in one initializer.  
+In iOS, we often use it for objects like UIAlertController, URLRequest, or custom models that require many optional configurations.  
+
+**🔧 Real-Life Analogy**  
+
+- Think of building a Burger 🍔:
+- You don’t pass all ingredients at once.
+- You add bun → patty → cheese → sauce → lettuce step by step.
+- Finally, you get a burger ready to eat.
+- That’s exactly what the Builder pattern does — builds an object step by step instead of one giant initializer.
+
+**🧑‍💻 Example in iOS (Swift)**
+Let’s say we want to build a complex UIAlertController step by step.  
+
+**Without Builder (messy)**  
+
+```swift
+let alert = UIAlertController(title: "Error",
+                              message: "Something went wrong",
+                              preferredStyle: .alert)
+
+alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: nil))
+alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+```
+This works, but if the alert becomes complex (lots of customization), the initializer becomes hard to read & maintain.  
+
+**With Builder Pattern**  
+
+```swift
+import UIKit
+
+// MARK: - Builder
+class AlertBuilder {
+    private var title: String?
+    private var message: String?
+    private var style: UIAlertController.Style = .alert
+    private var actions: [UIAlertAction] = []
+    
+    func setTitle(_ title: String) -> AlertBuilder {
+        self.title = title
+        return self
+    }
+    
+    func setMessage(_ message: String) -> AlertBuilder {
+        self.message = message
+        return self
+    }
+    
+    func setStyle(_ style: UIAlertController.Style) -> AlertBuilder {
+        self.style = style
+        return self
+    }
+    
+    func addAction(title: String, style: UIAlertAction.Style, handler: ((UIAlertAction) -> Void)? = nil) -> AlertBuilder {
+        let action = UIAlertAction(title: title, style: style, handler: handler)
+        actions.append(action)
+        return self
+    }
+    
+    func build() -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        actions.forEach { alert.addAction($0) }
+        return alert
+    }
+}
+
+// MARK: - Usage
+let alert = AlertBuilder()
+    .setTitle("Error")
+    .setMessage("Something went wrong")
+    .addAction(title: "Retry", style: .default, handler: nil)
+    .addAction(title: "Cancel", style: .cancel, handler: nil)
+    .build()
+```
+**✅ Benefits of Builder Pattern**  
+- Makes object creation readable & flexible.
+- Avoids large initializers with too many parameters.
+- Allows step-by-step construction.
+- Same builder can be reused for different objects (e.g., different types of alerts).
