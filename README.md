@@ -2037,3 +2037,125 @@ let alert = AlertBuilder()
 - Avoids large initializers with too many parameters.
 - Allows step-by-step construction.
 - Same builder can be reused for different objects (e.g., different types of alerts).
+
+## Question 31:  Explain Strategy Design Pattern?  
+
+Strategy is a behavioral design pattern that allows you to define a family of algorithms, put each one in a separate class, and make them interchangeable.  
+The client can switch strategies at runtime without changing its code.  
+
+**"Strategy pattern is used when we have multiple algorithms for a task, and we want to choose one at runtime.  
+In iOS, a real example is multiple payment methods or login methods — each strategy has the same interface but different implementation."**  
+
+**📖 Problem**  
+
+- When you load an image in an app, there can be multiple strategies:
+- Load from Cache (fastest).
+- Load from Disk (local file storage).
+- Load from Network (API or CDN).
+
+👉 Instead of hardcoding one way, we use the Strategy Pattern so that the client can switch at runtime.  
+
+**🧑‍💻 Example – Image Loading with Strategy**  
+
+```swift
+import UIKit
+
+// MARK: - Strategy Protocol
+protocol ImageLoadingStrategy {
+    func loadImage(name: String, completion: @escaping (UIImage?) -> Void)
+}
+
+// MARK: - Concrete Strategies
+
+// 1. Load from Cache
+class CacheImageLoader: ImageLoadingStrategy {
+    private var cache: [String: UIImage] = [
+        "logo": UIImage(systemName: "star.fill")! // mock image in cache
+    ]
+    
+    func loadImage(name: String, completion: @escaping (UIImage?) -> Void) {
+        print("📦 Loading from Cache...")
+        completion(cache[name])
+    }
+}
+
+// 2. Load from Disk
+class DiskImageLoader: ImageLoadingStrategy {
+    func loadImage(name: String, completion: @escaping (UIImage?) -> Void) {
+        print("💽 Loading from Disk...")
+        // Simulating disk read
+        let image = UIImage(systemName: "folder.fill")
+        completion(image)
+    }
+}
+
+// 3. Load from Network
+class NetworkImageLoader: ImageLoadingStrategy {
+    func loadImage(name: String, completion: @escaping (UIImage?) -> Void) {
+        print("🌐 Loading from Network...")
+        // Simulating network call with delay
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+            let image = UIImage(systemName: "wifi")
+            completion(image)
+        }
+    }
+}
+
+// MARK: - Context
+class ImageLoaderContext {
+    private var strategy: ImageLoadingStrategy
+    
+    init(strategy: ImageLoadingStrategy) {
+        self.strategy = strategy
+    }
+    
+    func setStrategy(_ strategy: ImageLoadingStrategy) {
+        self.strategy = strategy
+    }
+    
+    func load(name: String, completion: @escaping (UIImage?) -> Void) {
+        strategy.loadImage(name: name, completion: completion)
+    }
+}
+
+// MARK: - Usage
+let context = ImageLoaderContext(strategy: CacheImageLoader())
+
+// Try cache first
+context.load(name: "logo") { image in
+    print("✅ Got image from Cache:", image ?? UIImage())
+}
+
+// Switch to Disk
+context.setStrategy(DiskImageLoader())
+context.load(name: "logo") { image in
+    print("✅ Got image from Disk:", image ?? UIImage())
+}
+
+// Switch to Network
+context.setStrategy(NetworkImageLoader())
+context.load(name: "logo") { image in
+    print("✅ Got image from Network:", image ?? UIImage())
+}
+```
+
+**🖥 Sample Output**  
+```yml
+📦 Loading from Cache...
+✅ Got image from Cache: <UIImage: star.fill>
+💽 Loading from Disk...
+✅ Got image from Disk: <UIImage: folder.fill>
+🌐 Loading from Network...
+✅ Got image from Network: <UIImage: wifi>
+```
+
+**✅ Why This is Strategy Pattern**
+
+- Context (ImageLoaderContext) → Uses ImageLoadingStrategy.
+- Strategies (CacheImageLoader, DiskImageLoader, NetworkImageLoader) → Different ways of fetching images.
+- Client → Can switch strategies dynamically (setStrategy).
+
+**⚡ Real-World Note:**  
+
+This is how libraries like SDWebImage or Kingfisher internally work — they try cache → disk → network.
+Each step is basically a strategy.
