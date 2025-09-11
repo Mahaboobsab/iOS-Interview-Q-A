@@ -2301,3 +2301,72 @@ rootFolder.display()
       📄 Song.mp3
 
 ```
+
+## Question 34: What is Template Method?  
+
+In iOS development (and more broadly in software engineering), the Template Method is a behavioral design pattern that defines the **skeleton of an algorithm** in a base class but lets subclasses override specific steps of the algorithm without changing its overall structure.
+
+**🔧 Concept**  
+The Template Method pattern is useful when you have a process that follows a fixed sequence of steps, but some of those steps may vary depending on the context.  
+
+
+**🧱 Structure**  
+In Swift (or Objective-C), this is typically implemented using inheritance:  
+
+- **Base class defines the template method and the steps.**
+**- Subclasses override the customizable steps.**
+
+**📱 iOS Example: View Controller Lifecycle**  
+
+Let’s say you’re building a base view controller that handles common setup logic, but you want subclasses to customize certain parts.  
+
+```swift
+class BaseViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViews()
+        setupBindings()
+        fetchData()
+    }
+
+    // Template method steps
+    func setupViews() {
+        // Default implementation
+        view.backgroundColor = .white
+    }
+
+    func setupBindings() {
+        // Default implementation
+    }
+
+    func fetchData() {
+        // Default implementation
+    }
+}
+```
+
+Now, a subclass can override specific steps:  
+
+```swift
+class ProfileViewController: BaseViewController {
+    override func setupViews() {
+        super.setupViews()
+        // Custom UI setup for profile
+    }
+
+    override func fetchData() {
+        // Fetch profile-specific data
+    }
+}
+```
+
+**✅ Benefits**  
+
+- Promotes code reuse and consistency.
+- Makes the algorithm structure clear and maintainable.
+- Encourages separation of concerns.
+
+**⚠️ Considerations**  
+
+- Can lead to tight coupling due to inheritance.
+- Prefer protocols with default implementations in Swift when flexibility is needed.
