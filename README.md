@@ -1856,4 +1856,77 @@ user.balance = 2000.0 // 🔥 KVO triggers observer
 | **Customization**      | Limited                                           | Limited                                            | Limited                                           | Highly customizable                              |
 | **Example**            | `setValue(_:forKey:)`                            | `observe(_:options:changeHandler:)`                | `didSet { ... }`                                  | `@Published var name: String`                    |
 
+## Question 29: What is adapter design pattern?  
 
+Adapter helps us reuse existing classes/libraries without modifying them, by providing a middle layer that translates one interface into another.  
+
+**🔧 Real-Life Analogy**
+
+- Think of a charging adapter:
+- Your laptop charger plug doesn’t fit the wall socket.
+- You use an adapter to make them compatible.
+- Neither the socket nor the charger changes — only the adapter does the work
+
+```swift
+import Foundation
+import CoreLocation
+
+// MARK: - Target Protocol
+// This is what our app expects
+protocol LocationProvider {
+    func getLocation() -> String
+}
+
+// MARK: - Adaptee (Incompatible Interface)
+// Apple service returns CLLocation, which our app cannot use directly
+class AppleLocationService {
+    func currentLocation() -> CLLocation {
+        return CLLocation(latitude: 12.9716, longitude: 77.5946) // Bangalore
+    }
+}
+
+// MARK: - Adapter
+// Converts AppleLocationService into LocationProvider
+class LocationAdapter: LocationProvider {
+    private let appleService: AppleLocationService
+    
+    init(service: AppleLocationService) {
+        self.appleService = service
+    }
+    
+    func getLocation() -> String {
+        let location = appleService.currentLocation()
+        return "Lat: \(location.coordinate.latitude), Lng: \(location.coordinate.longitude)"
+    }
+}
+
+// MARK: - Client
+// Our app works only with LocationProvider, not AppleLocationService directly
+class LocationApp {
+    private let locationProvider: LocationProvider
+    
+    init(provider: LocationProvider) {
+        self.locationProvider = provider
+    }
+    
+    func showLocation() {
+        print("📍 Current Location -> \(locationProvider.getLocation())")
+    }
+}
+
+// MARK: - Usage
+let appleService = AppleLocationService()              // Adaptee
+let adapter = LocationAdapter(service: appleService)   // Adapter
+let app = LocationApp(provider: adapter)               // Client
+app.showLocation()
+```
+**🖥 Output**  
+```yml
+📍 Current Location -> Lat: 12.9716, Lng: 77.5946
+```
+**✅ Key Points in This Example**
+
+- **LocationProvider** = Target interface expected by client.
+- **AppleLocationService** = Adaptee (incompatible API).
+- **LocationAdapter** = Adapter (bridge between Adaptee & Target).
+- **LocationApp** = Client that uses LocationProvider without worrying about CoreLocation.
