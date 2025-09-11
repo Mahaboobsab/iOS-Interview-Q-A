@@ -2213,3 +2213,91 @@ remote.command = onCommand
 remote.pressButton()   // 💡 ON
 remote.pressUndo()     // 💡 OFF
 ```
+
+## Question 33: Explain Composite Design Pattern?  
+
+Composite pattern lets you treat individual objects and compositions of objects uniformly.  
+It allows you to build a tree structure of objects where clients can interact with single objects or groups of objects in the same way.  
+
+**Key Points**
+
+- **Component** → Common interface for objects and groups.
+- **Leaf** → Individual objects (cannot have children).
+- **Composite** → Groups of objects (can contain Leafs or other Composites).
+- **Client** → Works with Component interface, doesn’t care if it’s a Leaf or Composite.
+
+**Real-world iOS Example: UIViews**  
+
+- UIView is a **Composite**.
+- UILabel, UIButton are **Leaf** objects.
+- A UIView can contain multiple subviews (other Leaf or Composite views).
+- You can call addSubview() on a UIView and treat it the same way as a single UILabel.
+
+```swift
+import Foundation
+
+// Component
+protocol FileSystemItem {
+    var name: String { get }
+    func display(indent: String)
+}
+
+// Leaf
+class File: FileSystemItem {
+    let name: String
+    init(name: String) { self.name = name }
+    
+    func display(indent: String = "") {
+        print(indent + "📄 \(name)")
+    }
+}
+
+// Composite
+class Folder: FileSystemItem {
+    let name: String
+    private var items: [FileSystemItem] = []
+    
+    init(name: String) { self.name = name }
+    
+    func add(_ item: FileSystemItem) {
+        items.append(item)
+    }
+    
+    func display(indent: String = "") {
+        print(indent + "📁 \(name)")
+        for item in items {
+            item.display(indent: indent + "   ")
+        }
+    }
+}
+
+// Usage
+let file1 = File(name: "Resume.pdf")
+let file2 = File(name: "Photo.png")
+
+let folder1 = Folder(name: "Documents")
+folder1.add(file1)
+folder1.add(file2)
+
+let file3 = File(name: "Song.mp3")
+let folder2 = Folder(name: "Music")
+folder2.add(file3)
+
+let rootFolder = Folder(name: "Root")
+rootFolder.add(folder1)
+rootFolder.add(folder2)
+
+rootFolder.display()
+```
+
+**Sample Output**  
+
+```markdown
+📁 Root
+   📁 Documents
+      📄 Resume.pdf
+      📄 Photo.png
+   📁 Music
+      📄 Song.mp3
+
+```
