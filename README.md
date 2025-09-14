@@ -2391,7 +2391,7 @@ Snapshot testing verifies the visual output of a view or screen by comparing it 
 
 ---
 
-##3 3. How do you write a snapshot test using Point-Free’s SnapshotTesting?
+### 3. How do you write a snapshot test using Point-Free’s SnapshotTesting?
 
 ```swift
 import SnapshotTesting
