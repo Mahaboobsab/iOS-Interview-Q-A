@@ -2370,3 +2370,75 @@ class ProfileViewController: BaseViewController {
 
 - Can lead to tight coupling due to inheritance.
 - Prefer protocols with default implementations in Swift when flexibility is needed.
+
+## Question 35: 📸 What is Snapshot Testing in iOS
+
+A curated set of interview questions and answers focused on snapshot testing in iOS, ideal for Lead iOS Developers and aspiring CTOs.
+
+---
+
+### 1. What is snapshot testing in iOS?
+
+Snapshot testing verifies the visual output of a view or screen by comparing it to a previously recorded snapshot. If the current rendering differs, the test fails—alerting developers to unintended UI changes.
+
+---
+
+### 2. Which libraries are commonly used for snapshot testing in iOS?
+
+[Point-Free’s SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing) – Swift-native, supports multiple formats  
+- iOSSnapshotTestCase (FBSnapshotTestCase) – older, image-based testing  
+- Custom XCTest extensions for view hierarchy or string-based snapshots
+
+---
+
+##3 3. How do you write a snapshot test using Point-Free’s SnapshotTesting?
+
+```swift
+import SnapshotTesting
+import XCTest
+
+class ProfileViewTests: XCTestCase {
+    func testProfileViewSnapshot() {
+        let view = ProfileView(user: .mock)
+        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhone13)))
+    }
+}
+```
+
+### 4. What formats can you snapshot?
+- .image – visual rendering of views
+- .view – UIView hierarchy
+- .text – textual output
+- .json – structured data
+- .dump – Swift value dumps
+
+### 5. How do you make snapshot tests deterministic?  
+
+- Use mock data and fixed states
+- Disable animations and transitions
+- Set consistent device traits (e.g., .iPhone13, .darkMode)
+- Freeze time/date if relevant
+
+### 6. What are the pros and cons of snapshot testing?  
+
+**Pros:**  
+
+- Fast detection of UI regressions
+- Easy to write and maintain
+- Great for visual consistency across devices
+
+**Cons:**  
+
+
+- Fragile to minor, non-breaking changes
+- Can produce noisy diffs
+- Doesn’t test behavior or logic
+
+### 7. How do you update a snapshot when the UI changes intentionally?  
+
+Set record = true in your test or use the CLI to re-record:  
+
+```swift
+isRecording = true
+```
+Then run the test to generate a new snapshot. Always verify the change before committing.
