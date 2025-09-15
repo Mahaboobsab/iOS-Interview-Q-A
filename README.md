@@ -2510,3 +2510,98 @@ processOnlinePayment(using: creditCard, amount: 1200)
 processOnlinePayment(using: upi, amount: 500)
 processOfflinePayment(using: cod)
 ```
+**❌ Bad Example (LSP Violation)**  
+
+```swift
+class PaymentMethod {
+    func pay(amount: Double) {
+        // default payment
+        print("Paying ₹\(amount)")
+    }
+}
+
+class CreditCardPayment: PaymentMethod {
+    override func pay(amount: Double) {
+        print("Paid ₹\(amount) using Credit Card ✅")
+    }
+}
+
+class CashOnDelivery: PaymentMethod {
+    // ⚠️ Problem: COD cannot "pay" immediately
+    // If we inherit `pay`, what do we do here?
+    override func pay(amount: Double) {
+        fatalError("Cash on Delivery does not support direct pay!") 
+    }
+}
+
+```
+
+**👉 Here, if you pass CashOnDelivery where PaymentMethod is expected, the program breaks (fatalError).**  
+
+That violates LSP  
+
+**✅ Good Example (Follows LSP)**  
+
+We fix it by splitting responsibilities:  
+
+```swift
+// Superclass
+class PaymentMethod { }
+
+// Subclass for Online Payments
+class OnlinePaymentMethod: PaymentMethod {
+    func pay(amount: Double) {
+        print("Default online payment of ₹\(amount)")
+    }
+}
+
+// Subclass for Offline Payments
+class OfflinePaymentMethod: PaymentMethod {
+    func confirmOrder() {
+        print("Default offline order confirmation")
+    }
+}
+
+// MARK: - Implementations
+class CreditCardPayment: OnlinePaymentMethod {
+    override func pay(amount: Double) {
+        print("Paid ₹\(amount) using Credit Card ✅")
+    }
+}
+
+class UpiPayment: OnlinePaymentMethod {
+    override func pay(amount: Double) {
+        print("Paid ₹\(amount) using UPI ✅")
+    }
+}
+
+class CashOnDelivery: OfflinePaymentMethod {
+    override func confirmOrder() {
+        print("Order placed. Pay cash at delivery 🚚")
+    }
+}
+
+// MARK: - Usage
+func processOnlinePayment(using method: OnlinePaymentMethod, amount: Double) {
+    method.pay(amount: amount)
+}
+
+func processOfflinePayment(using method: OfflinePaymentMethod) {
+    method.confirmOrder()
+}
+
+// ✅ Subclasses replace superclass safely
+let creditCard: PaymentMethod = CreditCardPayment()
+let upi: PaymentMethod = UpiPayment()
+let cod: PaymentMethod = CashOnDelivery()
+
+processOnlinePayment(using: creditCard as! OnlinePaymentMethod, amount: 1200)
+processOnlinePayment(using: upi as! OnlinePaymentMethod, amount: 500)
+processOfflinePayment(using: cod as! OfflinePaymentMethod)
+```
+
+**🔑 Where LSP is applied here?**  
+
+- **CreditCardPayment** is-a OnlinePaymentMethod, which is-a PaymentMethod.
+- **CashOnDelivery** is-a OfflinePaymentMethod, which is-a PaymentMethod.
+- So whenever PaymentMethod is expected, you can substitute it with any of its subclasses, and the program still behaves correctly.
