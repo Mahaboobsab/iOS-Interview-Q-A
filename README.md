@@ -2455,4 +2455,58 @@ Then run the test to generate a new snapshot. Always verify the change before co
 	**Example of payment method.**  
 
 	When we have PaymentMothod class with pay method wit amount, but it will not suitable for COD option.  
-	So As Superclass it should not have payMethod. We need to create some sublasses like OnlinePaymentMethod & Offline PayMentMethod. 
+	So As Superclass it should not have payMethod. We need to create some sublasses like OnlinePaymentMethod & Offline PayMentMethod.
+
+```swift
+// ✅ Base protocol (follows LSP)
+protocol PaymentMethod { }
+
+// Subclass for methods that can pay online
+protocol OnlinePaymentMethod: PaymentMethod {
+    func pay(amount: Double)
+}
+
+// Subclass for methods that are offline (like COD)
+protocol OfflinePaymentMethod: PaymentMethod {
+    func confirmOrder()
+}
+
+// MARK: - Implementations
+
+class CreditCardPayment: OnlinePaymentMethod {
+    func pay(amount: Double) {
+        print("Paid ₹\(amount) using Credit Card ✅")
+    }
+}
+
+class UpiPayment: OnlinePaymentMethod {
+    func pay(amount: Double) {
+        print("Paid ₹\(amount) using UPI ✅")
+    }
+}
+
+class CashOnDelivery: OfflinePaymentMethod {
+    func confirmOrder() {
+        print("Order placed. Pay cash on delivery 🚚")
+    }
+}
+
+// MARK: - Usage
+
+func processOnlinePayment(using method: OnlinePaymentMethod, amount: Double) {
+    method.pay(amount: amount)
+}
+
+func processOfflinePayment(using method: OfflinePaymentMethod) {
+    method.confirmOrder()
+}
+
+// ✅ Works correctly without breaking LSP
+let creditCard = CreditCardPayment()
+let upi = UpiPayment()
+let cod = CashOnDelivery()
+
+processOnlinePayment(using: creditCard, amount: 1200)
+processOnlinePayment(using: upi, amount: 500)
+processOfflinePayment(using: cod)
+```
