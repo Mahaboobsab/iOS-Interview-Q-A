@@ -2442,3 +2442,17 @@ Set record = true in your test or use the CLI to re-record:
 isRecording = true
 ```
 Then run the test to generate a new snapshot. Always verify the change before committing.
+
+## Question 36: SOLID PRINCIPLES?  
+
+## Liskov Substitution Principle (LSP) in Swift
+
+- Objects of a superclass should be replaceable with objects of its subclasses without altering the correctness of the program 
+- In simpler terms, if class B is a subclass of class A, then you should be able to use B wherever A is expected — without the program breaking or behaving incorrectly 
+- You should be able to use a child class anywhere the parent class is expected, and everything should still work correctly.
+  
+
+	**Example of payment method.**  
+
+	When we have PaymentMothod class with pay method wit amount, but it will not suitable for COD option.  
+	So As Superclass it should not have payMethod. We need to create some sublasses like OnlinePaymentMethod & Offline PayMentMethod. 
