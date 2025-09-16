@@ -2605,3 +2605,57 @@ processOfflinePayment(using: cod as! OfflinePaymentMethod)
 - **CreditCardPayment** is-a OnlinePaymentMethod, which is-a PaymentMethod.
 - **CashOnDelivery** is-a OfflinePaymentMethod, which is-a PaymentMethod.
 - So whenever PaymentMethod is expected, you can substitute it with any of its subclasses, and the program still behaves correctly.
+
+## Question 37: Dependency Inversion Principle (DIP) is the D in SOLID?  
+
+**High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g., protocols).**  
+This principle ensures loose coupling and makes the code more flexible and testable.  
+
+**Here’s a Swift example:**  
+```swift
+// Abstraction (protocol)
+protocol PaymentService {
+    func processPayment(amount: Double)
+}
+
+// Low-level module 1
+class PayPalService: PaymentService {
+    func processPayment(amount: Double) {
+        print("Processing $\(amount) via PayPal.")
+    }
+}
+
+// Low-level module 2
+class StripeService: PaymentService {
+    func processPayment(amount: Double) {
+        print("Processing $\(amount) via Stripe.")
+    }
+}
+
+// High-level module depends on abstraction (not on concrete class)
+class Checkout {
+    private let paymentService: PaymentService
+    
+    init(paymentService: PaymentService) {
+        self.paymentService = paymentService
+    }
+    
+    func completeOrder(amount: Double) {
+        paymentService.processPayment(amount: amount)
+    }
+}
+
+// Usage
+let paypalCheckout = Checkout(paymentService: PayPalService())
+paypalCheckout.completeOrder(amount: 100.0)
+// Output: Processing $100.0 via PayPal.
+
+let stripeCheckout = Checkout(paymentService: StripeService())
+stripeCheckout.completeOrder(amount: 200.0)
+// Output: Processing $200.0 via Stripe.
+```
+
+**✅ Why this follows DIP:**
+- Checkout (high-level module) doesn’t directly depend on PayPalService or StripeService (low-level modules).
+- Instead, both depend on the abstraction PaymentService.
+- We can easily swap implementations (PayPal, Stripe, or even a mock service for testing) without changing Checkout.
