@@ -1188,28 +1188,74 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 <img width="751" height="515" alt="Screenshot 2025-08-14 at 10 18 30 PM" src="https://github.com/user-attachments/assets/0b9c0586-cec5-4061-b05b-025673893e01" />
 
 
-## Question 21: Explain SCRUM?  
+## Question 21: Explain Agile, SCRUM & KANBAN?  
 
-**🧩 Slide 1: Requirement Breakdown**  
 
+**🔹 Agile (The Philosophy / Umbrella)**  
+- Agile is a mindset or set of principles defined in the Agile Manifesto.
+**Focuses on:**
+- Iterative development (deliver in small chunks).
+- Customer collaboration (continuous feedback).
+- Responding to change quickly.
+- Individuals & interactions over processes and tools.
+
+**Agile is the umbrella → under it, we have different frameworks like Scrum, Kanban, XP, Lean.**  
+
+**SCRUM**  
+
+**🧩 Requirement Breakdown**  
 **🔹 Roles Involved:**  
-
 **Business Analyst / Product Owner:** Gathers and defines requirements.
-
 **Development Team:** Builds the software based on those requirements.
 
 **🔹 Flow of Work:**  
 
 **Feature**: A high-level capability (e.g., Attendance Module).
-
 **Epic**: A large chunk of work under that feature (e.g., Student Attendance).
-
 **User Story**: A specific task or functionality (e.g., “Add Student Attendance”).
 
-✅ This breakdown ensures clarity, traceability, and focus during development.
+✅ This breakdown ensures clarity, traceability, and focus during development.  
 
+<img width="589" height="636" alt="SCRUM" src="https://github.com/user-attachments/assets/f66237c4-f6de-4539-bb45-6911df74355a" />  
 
-<img width="589" height="636" alt="SCRUM" src="https://github.com/user-attachments/assets/f66237c4-f6de-4539-bb45-6911df74355a" />
+**🔹 Kanban (Another Agile Framework)**  
+
+**🔹 Kanban**
+
+- **Structure**: No fixed iterations — work flows continuously.
+- **Roles**: No mandatory roles. The existing team can manage the flow.
+- **Board**: Visual board (To Do → In Progress → Done), with Work-In-Progress (WIP) limits.
+- **Workload**: Tasks are pulled when capacity is available, not planned upfront.
+- **Change**: Very flexible — tasks can be added/changed anytime.
+- **Delivery**: Continuous — deliver whenever a task is done.
+- **Best fo**r: Teams needing flexibility, handling support/maintenance work, or when priorities change often.
+- Kanban focuses on visualizing work and managing flow.
+
+- **How it works:**
+- Uses a Kanban board (To Do → In Progress → Done).
+- Sets Work-In-Progress (WIP) limits to avoid overloading the team.
+- No fixed Sprints → tasks are delivered continuously as soon as they’re done.
+- Best suited for: Teams handling support, maintenance, or operations work where priorities change often.
+
+**Scrum vs Kanban Analogy (Restaurant Kitchen Example) 🍽️**
+
+**Scrum**:
+- Imagine a restaurant that takes orders in batches.
+- The chef team plans a fixed menu for the night (Sprint Planning).
+- They prepare all dishes in that batch during the service (Sprint).
+- At the end of service, they deliver the full set of meals to customers (Sprint Review).
+- Afterward, they review what went well or not (Retrospective).
+
+**👉 Structured, predictable, batch delivery.**  
+
+**Kanban**:
+- Imagine a fast-food counter.
+- Orders keep coming in continuously.
+- The chef prepares each order as soon as there’s capacity (Pull system).
+- As soon as a meal is done, it goes to the customer.
+- No fixed batch or end time — just continuous flow.
+
+**👉 Flexible, adaptive, continuous delivery.**
 
 ## Question 21: Explain Core data stack?  
 ![Core data stack](https://github.com/user-attachments/assets/c59395a4-62ed-458d-8296-da5f1472214b)
