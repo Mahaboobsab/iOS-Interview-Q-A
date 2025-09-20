@@ -1281,7 +1281,7 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 
 - Changes are complex or destructive.
 - You’re removing entities or attributes.
-- You’re changing attribute types (e.g., String to Int).
+- You’re changing **attribute types (e.g., String to Int).**
 - You need to transform data during migration.
 - You’re merging or splitting entities.
 
@@ -1300,7 +1300,75 @@ SceneDelegate manages the lifecycle of individual UI scenes (windows). It was in
 |Setup|	Automatic|	Manual|
 |Mapping Model Required|	No|	Yes|
 |Custom Logic|	No|	Often Yes|
-|Typical Use Case|	Add/rename attributes|	Merge/split entities, type change|
+|Typical Use Case|	Add/rename attributes|	Merge/split entities, type change|  
+
+### 📘 Core Data Relationships in iOS
+
+Core Data relationships define how entities (data models) connect to each other, enabling complex object graphs and efficient data management.
+
+---
+
+## 🔗 What Is a Relationship?
+
+A **relationship** links one entity to another, similar to foreign keys in relational databases.
+
+**Examples:**
+- A `User` has many `Posts`
+- A `Book` belongs to one `Author`
+- A `Course` has many `Students`
+
+---
+
+## 🧩 Types of Relationships
+
+| Type           | Description                                      | Example                          |
+|----------------|--------------------------------------------------|----------------------------------|
+| One-to-One     | One object links to one other object             | `User` ↔ `Profile`               |
+| One-to-Many    | One object links to many others                  | `Author` → `Books`               |
+| Many-to-Many   | Many objects link to many others                 | `Student` ↔ `Course`             |
+
+---
+
+## ⚙️ Relationship Attributes
+
+- **Optional**: Can be nil or must have a value
+- **Inverse Relationship**: Maintains bidirectional consistency
+- **Delete Rule**:
+  - `Cascade`: Deletes related objects
+  - `Nullify`: Sets relationship to nil
+  - `Deny`: Prevents deletion if relationship exists
+  - `No Action`: Leaves related objects untouched
+- **Transient**: Not saved to persistent store
+
+---
+
+## 🛠️ How to Define Relationships in Xcode
+
+1. Open `.xcdatamodeld` file
+2. Select an entity
+3. Click "+" under Relationships
+4. Set:
+   - Destination entity
+   - Relationship type (To-One / To-Many)
+   - Inverse relationship
+   - Delete rule
+
+---
+
+## 🧪 Swift Example
+
+```swift
+class Author: NSManagedObject {
+    @NSManaged var name: String
+    @NSManaged var books: Set<Book>
+}
+
+class Book: NSManagedObject {
+    @NSManaged var title: String
+    @NSManaged var author: Author
+}
+```
+
 
 
 ## Question 22: Explain Repository Pattern?  
