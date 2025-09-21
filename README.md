@@ -1717,7 +1717,8 @@ Think of **architecture** as the **blueprint of a house** (how rooms are laid ou
 
 
 
-<img width="706" height="752" alt="Design patter" src="https://github.com/user-attachments/assets/509d5f72-45d2-427b-84c7-fbe55dd3d979" />
+<img width="689" height="686" alt="Design Pattern ios" src="https://github.com/user-attachments/assets/2a560f6d-3622-44f2-881b-2575860b2dce" />
+
 
 
 
