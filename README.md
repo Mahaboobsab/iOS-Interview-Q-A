@@ -1716,7 +1716,8 @@ Think of **architecture** as the **blueprint of a house** (how rooms are laid ou
 | **Template Method**   | Defines the skeleton of an algorithm, deferring steps to subclasses.       | `UIViewController` lifecycle methods (`viewDidLoad`, etc.) |
 
 
-<img width="740" height="768" alt="Screenshot 2025-09-21 at 6 28 50 PM" src="https://github.com/user-attachments/assets/3358229c-d75a-47dc-b9bd-49bb0a66bcf0" />
+
+<img width="706" height="752" alt="Design patter" src="https://github.com/user-attachments/assets/509d5f72-45d2-427b-84c7-fbe55dd3d979" />
 
 
 
