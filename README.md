@@ -1641,6 +1641,8 @@ struct IntSwapper: Swappable {
 ```
 ## Question 27:Difference between Architecture vs Design Patterns in iOS?
 
+
+
 Understanding the difference between **architecture** and **design patterns** is crucial for building scalable and maintainable iOS applications.
 
 ---
@@ -1712,6 +1714,10 @@ Think of **architecture** as the **blueprint of a house** (how rooms are laid ou
 | **Command**           | Encapsulates a request as an object.                                       | Undo/Redo operations, UI actions                          |
 | **Composite**         | Treats individual objects and compositions uniformly.                      | View hierarchies (`UIView` containing subviews)            |
 | **Template Method**   | Defines the skeleton of an algorithm, deferring steps to subclasses.       | `UIViewController` lifecycle methods (`viewDidLoad`, etc.) |
+
+
+<img width="740" height="768" alt="Screenshot 2025-09-21 at 6 28 50 PM" src="https://github.com/user-attachments/assets/3358229c-d75a-47dc-b9bd-49bb0a66bcf0" />
+
 
 
 ## 📌 Conclusion
