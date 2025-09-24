@@ -2910,4 +2910,158 @@ Second async block executes:
 print("3") runs last.  
 ✅ Output: 3  
 
- 
+## Question 39: Explain different types of Swift Initializers
+
+This document demonstrates various types of Swift initializers using a payment-related domain, such as `Transaction`, `PaymentMethod`, and `UserAccount`.
+
+---
+
+### 1. Designated Initializer  
+
+A designated initializer is the primary initializer for a class. It must initialize all properties introduced by that class and call an appropriate superclass initializer to continue the initialization chain.  
+
+
+```swift
+
+class Transaction {
+    var amount: Double
+    var currency: String
+
+// Designated initializer
+    init(amount: Double, currency: String) {
+        self.amount = amount
+        self.currency = currency
+    }
+}
+```
+
+### 2. Convenience Initializer  
+
+A convenience initializer is a secondary initializer that must call a designated initializer from the same class. It's useful for setting default values or creating instances for specific use cases.  
+
+
+```swift
+
+class PaymentMethod {
+    var type: String
+    var details: String
+
+    // Designated initializer
+    init(type: String, details: String) {
+        self.type = type
+        self.details = details
+    }
+
+   // Convenience initializer
+    convenience init(cardNumber: String) {
+        self.init(type: "Card", details: cardNumber)
+    }
+}
+
+```
+
+### 3. Failable Initializer
+
+ A failable initializer returns nil if initialization fails.
+ Useful when input validation or external resources are required.
+
+```swift
+
+struct UserAccount {
+    var username: String
+    var balance: Double
+
+    init?(username: String, balance: Double) {
+        guard !username.isEmpty, balance >= 0 else { return nil }
+        self.username = username
+        self.balance = balance
+    }
+}
+
+```
+### 4. Required Initializer  
+
+ A required initializer must be implemented by all subclasses.
+ Ensures consistent initialization across inheritance hierarchies.
+
+
+```swift
+class PaymentProcessor {
+    var processorName: String
+// Required initializer must be implemented
+    required init(processorName: String) {
+        self.processorName = processorName
+    }
+}
+
+class StripeProcessor: PaymentProcessor {
+    var apiKey: String
+
+    required init(processorName: String) {
+        self.apiKey = "test_key"
+        super.init(processorName: processorName)
+    }
+}
+```
+
+### 5. Memberwise Initializer (Structs)  
+
+Automatically provided by Swift for structs. Initializes all stored properties.
+
+```swift
+struct Invoice {
+    var id: String
+    var total: Double
+    var isPaid: Bool
+}
+```
+
+### 6. Default Initializer 
+
+Provided when all properties have default values and no custom initializer is defined.
+
+```swift
+class PaymentSettings {
+    var currency: String = "INR"
+    var autoRetry: Bool = true
+    // Swift provides: init()
+}
+```
+
+### 7. Custom Initializer  
+
+Any initializer you define manually to customize object creation.  
+
+```swift
+struct Person {
+    var name: String
+    var age: Int
+
+    // Custom initializer
+    init(name: String) {
+        self.name = name
+        self.age = 18   // default age
+    }
+}
+
+let p1 = Person(name: "Meheboob")
+print(p1.name)  // Meheboob
+print(p1.age)   // 18
+```
+
+**Explanation**:  
+
+By default, Swift provides a memberwise initializer for structs:  
+
+```swift
+Person(name: String, age: Int)```
+```
+
+But here, we define our own initializer:  
+
+```swift
+init(name: String) { ... }
+```
+
+It allows us to customize how objects are created. In this case, if we only pass a name, the initializer automatically sets age = 18.  
+
