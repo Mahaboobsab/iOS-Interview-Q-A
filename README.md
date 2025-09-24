@@ -2781,3 +2781,27 @@ stripeCheckout.completeOrder(amount: 200.0)
 - Checkout (high-level module) doesn’t directly depend on PayPalService or StripeService (low-level modules).
 - Instead, both depend on the abstraction PaymentService.
 - We can easily swap implementations (PayPal, Stripe, or even a mock service for testing) without changing Checkout.
+
+## Question 38: Guess below Multithreading outpouts?  
+
+~~~swift
+DispatchQueue.global().sync {
+    DispatchQueue.global().sync {
+        print("Step 1")
+    }
+    print("Step 2")
+}
+~~~
+
+**Output**
+~~~yml
+Step 1
+Step 2
+~~~
+
+**Explaination**  
+
+- The outer sync submits a block to the global concurrent queue and waits until it finishes.
+- Inside that block, another sync is submitted to the same queue. Because it’s concurrent, a second thread is free to pick it up immediately.
+- "Step 1" is printed first, because the inner sync must complete before continuing.
+- Once that finishes, the outer block resumes and prints "Step 2".
