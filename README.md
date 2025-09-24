@@ -2855,4 +2855,59 @@ Submits work synchronously to a concurrent background queue.
 After that finishes, print("Step 2") runs.  
 ✅ Output: Step 2  
 
+#3
+~~~swift
+print("1")
+
+DispatchQueue.main.async {
+    print("2")
+    DispatchQueue.main.async {
+        print("3")
+    }
+    print("4")
+}
+
+print("5")
+~~~
+
+**Output**  
+
+~~~yml
+1
+5
+2
+4
+3
+~~~
+
+**Step-by-Step Execution**  
+
+print("1")  
+Runs immediately on the main thread.  
+✅ Output: 1  
+
+DispatchQueue.main.async { ... }  
+This schedules a block on the main queue asynchronously.  
+→ It won’t run right now; it will wait until the current call stack is clear.  
+
+print("5")  
+Runs right after scheduling the async block (still on the main thread, synchronously).  
+✅ Output: 5  
+
+Now the first async block starts executing (when the main queue gets time):  
+
+print("2") → runs immediately.  
+✅ Output: 2  
+
+Then, another main.async { print("3") } is scheduled.  
+→ This new block is queued after the current one finishes.  
+
+print("4") → runs immediately after scheduling the second block.  
+✅ Output: 4  
+
+Second async block executes:  
+
+print("3") runs last.  
+✅ Output: 3  
+
  
