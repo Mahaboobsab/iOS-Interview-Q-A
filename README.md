@@ -2784,6 +2784,7 @@ stripeCheckout.completeOrder(amount: 200.0)
 
 ## Question 38: Guess below Multithreading outpouts?  
 
+#1
 ~~~swift
 DispatchQueue.global().sync {
     DispatchQueue.global().sync {
@@ -2805,3 +2806,53 @@ Step 2
 - Inside that block, another sync is submitted to the same queue. Because it’s concurrent, a second thread is free to pick it up immediately.
 - "Step 1" is printed first, because the inner sync must complete before continuing.
 - Once that finishes, the outer block resumes and prints "Step 2".
+
+#2
+~~~swift
+print("Step 0")
+
+DispatchQueue.main.async {
+    DispatchQueue.global().sync {
+        print("Step 1")
+    }
+    print("Step 2")
+}
+
+print("Step 3")
+~~~
+
+**Output**  
+
+~~~yml
+Step 0
+Step 3
+Step 1
+Step 2
+~~~
+
+**Step-by-Step Execution**  
+
+print("Step 0")  
+Runs immediately on the main thread.  
+✅ Output: Step 0  
+
+DispatchQueue.main.async { ... }  
+This schedules the block to run later on the main thread (asynchronously).  
+→ It does not execute immediately, so the program continues.  
+
+print("Step 3")  
+Runs right after scheduling, still on the main thread.  
+✅ Output: Step 3  
+
+Main async block starts running (when the main runloop picks it up):  
+
+Inside it:  
+DispatchQueue.global().sync { print("Step 1") }  
+Submits work synchronously to a concurrent background queue.  
+→ "Step 1" is printed before continuing.  
+✅ Output: Step 1  
+
+After that finishes, print("Step 2") runs.  
+✅ Output: Step 2  
+
+ 
