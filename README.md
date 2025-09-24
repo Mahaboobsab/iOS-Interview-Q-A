@@ -1715,11 +1715,7 @@ Think of **architecture** as the **blueprint of a house** (how rooms are laid ou
 | **Composite**         | Treats individual objects and compositions uniformly.                      | View hierarchies (`UIView` containing subviews)            |
 | **Template Method**   | Defines the skeleton of an algorithm, deferring steps to subclasses.       | `UIViewController` lifecycle methods (`viewDidLoad`, etc.) |
 
-
-
-<img width="689" height="686" alt="Design Pattern ios" src="https://github.com/user-attachments/assets/2a560f6d-3622-44f2-881b-2575860b2dce" />
-
-
+<img width="593" height="561" alt="Design Patterns" src="https://github.com/user-attachments/assets/f5b7fb75-df83-4e23-964d-3e887d2ea09b" />
 
 
 ## 📌 Conclusion
