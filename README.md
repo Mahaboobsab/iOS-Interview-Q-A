@@ -3061,3 +3061,74 @@ init(name: String) { ... }
 
 It allows us to customize how objects are created. In this case, if we only pass a name, the initializer automatically sets age = 18.  
 
+## Question 40:  🧠 What Is Copy-on-Write (COW)?
+
+## 🔹 Overview
+**Copy-on-Write (COW)** is a memory optimization technique used in programming and operating systems.  
+It **defers copying data until it is actually modified** — hence the name “copy *on write*”.
+
+---
+
+## 🔹 Core Idea
+When two or more references point to the **same data**, they initially **share** the same memory to save space.  
+A **new copy** of the data is created **only when one of them tries to modify** it.
+
+---
+
+## 🔹 Conceptual Example
+Imagine you and your friend share a Google Doc:
+
+- 🧾 Initially, you both see **the same document** — no extra copies.
+- ✏️ When **you start editing**, Google makes a **copy** for you so your changes don’t affect your friend’s version.
+
+That’s **Copy-on-Write** — *copy only when you write*.
+
+---
+
+## 🔹 In Swift
+Swift uses **Copy-on-Write** for value types like:
+- `Array`
+- `Dictionary`
+- `Set`
+- `String`
+
+### Example:
+```swift
+var array1 = [1, 2, 3]
+var array2 = array1  // No copy yet — both share the same storage
+
+array2.append(4)     // Copy happens here because array2 is modified
+
+print(array1) // [1, 2, 3]
+print(array2) // [1, 2, 3, 4]
+```
+
+✅ **Efficient**: Memory is shared until a mutation occurs.  
+✅ **Safe**: Each variable behaves independently once modified.
+
+---
+
+## 🔹 In Operating Systems
+COW is used when creating new processes using `fork()`:
+- The child process **shares** the parent’s memory pages.
+- If either process modifies a page, **only that page is copied**.
+
+This significantly reduces overhead in process creation.
+
+---
+
+## 🔹 Summary Table
+
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Optimize memory and performance |
+| **When Copy Happens** | On modification (write) |
+| **Used In** | Swift collections, OS memory management, virtual machines |
+| **Benefit** | Avoid unnecessary copying of large data |
+
+---
+
+## 🧩 Summary
+Copy-on-Write is a smart strategy to **balance performance and safety**, ensuring that memory is copied **only when needed**, not always by default.
+
+
