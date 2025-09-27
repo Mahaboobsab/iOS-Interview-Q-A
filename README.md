@@ -1,7 +1,13 @@
 # iOS-Interview-QA
 Contains interview question &amp; Answers on **Objective C & Swift**
 
-## Question 1: Explain iOS Property Attributes  
+## Question 1: What is the difference between class, struct & Actor?  
+
+<img width="757" height="569" alt="Screenshot 2025-09-27 at 8 02 40 AM" src="https://github.com/user-attachments/assets/9fc625c0-baf1-4c68-8314-82505cda93bf" />
+
+
+
+## Question 2: Explain iOS Property Attributes  
 
 This table provides a concise explanation of common property attributes used in iOS development (Objective-C), including their default values.
 
@@ -17,7 +23,7 @@ This table provides a concise explanation of common property attributes used in 
 | `readonly`    | Only allows a getter; no setter is generated.                                         | ❌ No                       |
 
 
-## Question 2: Difference between strong & retain?  
+## Question 3: Difference between strong & retain?  
 
 - **strong** - Swift (modern syntax)
 - **retain** - Objective C (older terminology)
@@ -30,7 +36,7 @@ This table provides a concise explanation of common property attributes used in 
   @property(retain) Person *person;
   ```
   
-## Question 3: Explain what is the difference between Weak & Unowned?  
+## Question 4: Explain what is the difference between Weak & Unowned?  
 
 Ans:  
 | Feature           |  weak                                   | unowned                                       |
@@ -133,7 +139,7 @@ class WelcomeViewController: UIViewController {
     You're sure self will still exist.  
     You want to avoid optional unwrapping (self?).  
 
-## Question 4: Explain why swift is called protocol oriented language?  
+## Question 5: Explain why swift is called protocol oriented language?  
   - They are not limited to **classes**, **structs** & **enums** can conform too.
   - Protocol extenstion allow default behaviour
   - Encourgages **composition** over inheritance.
