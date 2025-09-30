@@ -3167,4 +3167,108 @@ Without dSYM (unsymbolicated):
 1   MyApp  TransactionViewController.loadTransactions() + 32
 ```
 
+import pypandoc
+
+text = """
+## Question 40: Certificates and Provisioning Profiles
+
+### 1. What is the difference between a Certificate and a Provisioning Profile in iOS?
+**Certificate:**
+- A certificate is issued by Apple to identify a developer or a company.
+- It ensures that the app is signed by a trusted source.
+- Types: Development, Distribution (App Store, Ad Hoc, Enterprise).
+
+**Provisioning Profile:**
+- A provisioning profile links your **certificate**, **app ID**, and **device(s)** together.
+- It allows the app to run on specific devices or be published on the App Store.
+- Types: Development, Ad Hoc, App Store, Enterprise.
+
+Example: Think of a certificate as your ID card, and a provisioning profile as a **permission slip** allowing your app to run on certain devices.
+
+---
+
+### 2. What are the different types of iOS Certificates?
+1. **Development Certificate:** Used to sign apps during development and testing on devices.
+2. **Distribution Certificate:** Used to sign apps for release.
+   - **App Store Distribution:** For apps published on the App Store.
+   - **Ad Hoc Distribution:** For testing apps on specific devices outside the App Store.
+   - **Enterprise Distribution:** For internal distribution within an organization.
+
+---
+
+### 3. What are the different types of Provisioning Profiles?
+1. **Development Provisioning Profile:** For testing apps on registered devices using a development certificate.
+2. **Ad Hoc Provisioning Profile:** Distribute apps to a limited number of devices outside the App Store.
+3. **App Store Provisioning Profile:** Required to submit apps to the App Store; does not include device IDs.
+4. **Enterprise Provisioning Profile:** For in-house apps distribution within a company.
+
+---
+
+### 4. What is an App ID? How is it linked to certificates and provisioning profiles?
+- **App ID** uniquely identifies an app in the Apple ecosystem.
+- It is linked to certificates and provisioning profiles:
+  - **Certificates** authenticate the developer/company.
+  - **Provisioning profiles** use the App ID and certificates to allow installation on devices.
+
+---
+
+### 5. Can you explain the relationship between Certificate, Provisioning Profile, and Device?
+- A **certificate** validates the developer identity.
+- A **provisioning profile** contains:
+  - The **certificate** (who can sign the app)
+  - **App ID** (which app can run)
+  - **Device IDs** (where the app can run, for dev/ad hoc)
+- The combination ensures that only authorized apps run on registered devices.
+
+---
+
+### 6. What is an Apple Developer Account’s role in Certificates and Provisioning Profiles?
+- Apple Developer Account allows you to:
+  1. Generate development and distribution certificates.
+  2. Register devices.
+  3. Create App IDs.
+  4. Create and download provisioning profiles.
+
+---
+
+### 7. What is a wildcard App ID? When would you use it?
+- **Wildcard App ID:** A generic App ID that can match multiple apps.
+  - Example: `com.company.*` matches `com.company.app1`, `com.company.app2`, etc.
+- **Use case:** When you want a single provisioning profile for multiple apps (usually for development).
+
+---
+
+### 8. What is the difference between an Ad Hoc provisioning profile and an App Store provisioning profile?
+
+| Feature | Ad Hoc | App Store |
+|----------|--------|-----------|
+| Distribution | Limited registered devices | Public via App Store |
+| Device IDs | Required | Not required |
+| Certificate | Distribution | Distribution |
+| Use Case | Beta testing | Release to public |
+
+---
+
+### 9. What is a “Team ID” in provisioning profiles?
+- **Team ID** is a unique identifier assigned by Apple to a developer account or organization.
+- It is included in provisioning profiles and certificates to identify which developer/team is allowed to sign and run the app.
+
+---
+
+### 10. How do you fix “No matching provisioning profile found” error?
+1. Check if the app’s **Bundle ID** matches the App ID in the provisioning profile.
+2. Ensure the provisioning profile contains the **correct certificate**.
+3. Ensure the device is registered (for development/ad hoc).
+4. Refresh profiles in Xcode: **Xcode → Preferences → Accounts → Download Manual Profiles**.
+
+---
+
+### 11. What is automatic signing vs manual signing in Xcode?
+- **Automatic Signing:** Xcode manages certificates and provisioning profiles for you. Good for beginners or simple projects.
+- **Manual Signing:** Developer manages certificates and provisioning profiles manually. Required for complex apps, multiple teams, or enterprise distribution.
+"""
+
+output = "/mnt/data/iOS_Certificates_and_Provisioning_Profile_Interview_QA.md"
+pypandoc.convert_text(text, 'md', format='md', outputfile=output, extra_args=['--standalone'])
+output
 
