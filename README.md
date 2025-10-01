@@ -3170,7 +3170,11 @@ Without dSYM (unsymbolicated):
 import pypandoc
 
 text = """
-## Question 40: Certificates and Provisioning Profiles
+## Question 40: Certificates and Provisioning Profiles  
+
+
+<img width="781" height="444" alt="Screenshot 2025-10-01 at 6 32 04 AM" src="https://github.com/user-attachments/assets/4fc7f83e-9c8a-49e9-aa5c-f93c57a0ec7c" />
+
 
 ### 1. What is the difference between a Certificate and a Provisioning Profile in iOS?
 **Certificate:**
