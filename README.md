@@ -3276,5 +3276,10 @@ Example: Think of a certificate as your ID card, and a provisioning profile as a
 
 output = "/mnt/data/iOS_Certificates_and_Provisioning_Profile_Interview_QA.md"
 pypandoc.convert_text(text, 'md', format='md', outputfile=output, extra_args=['--standalone'])
-output
+output  
+
+## Question 41: Explain Access specifiers?  
+
+<img width="805" height="366" alt="Screenshot 2025-11-28 at 9 20 35 AM" src="https://github.com/user-attachments/assets/392889e3-2ec7-4fce-9831-75cf44ebebc8" />
+
 
